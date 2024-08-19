@@ -1,6 +1,10 @@
+
 namespace NetRecord.Services;
 
-public class NetRecord
+public class NetRecordHttpClient : HttpClient
 {
-    
+    internal NetRecordHttpClient(NetRecordHandler handler) : base(handler)
+    {
+        
+    }
 }

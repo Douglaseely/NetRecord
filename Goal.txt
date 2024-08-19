@@ -1,0 +1,22 @@
+The ultimate goal of NetRecord is to create a way to record and replay http request, 
+while letting the user fully control what part of the request is used to match to get any saved request responses
+There are 2 main focuses for the configurability of this project are:
+
+1) User control over the unique identifier for the requests sent, so they can decide what will be used to match a request sent to a request response.
+This will ideally be configurable during runtime so that within a single service lifetime there can be multiple requests pulled or saved in different ways,
+though currently I'm not sure what configuration can both be edited after setup and passed through the generic HTTP Client calls that will be being used.
+
+2) User control over where specifically recordings are saved. Again the goal will be for the user to be able to adjust these values during runtime, 
+allowing saving to be changed between multiple requests of the same scoped service. Same issue arises here however, 
+where I don't know how to pass the configuration through.
+
+Version v1.0.0 Requirements:
+Record and Replay requests
+Unique Identifier and save strategy configurable during service setup
+
+Stretch Goals:
+Add a way to change the inside of the DI container after the scope has been made: 
+The default IServiceProvider is an immutable DI container, so I CANNOT make changes after setup using it, in order to add 
+the post setup runtime changing abilities that I want, it will require building my own implementation of the service provider.
+This side of this library will come with v2, as I don't have the time resources to build that in depth of a user interface right now, and its
+not explicitly needed yet.
