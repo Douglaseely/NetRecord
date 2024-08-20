@@ -1,18 +1,14 @@
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using NetRecord.Interfaces;
-using NetRecord.Utils;
 using NetRecord.Utils.Enums;
-using NetRecord.Utils.Extensions;
+using NetRecord.Utils.Exceptions;
 using NetRecord.Utils.Models;
 
-namespace NetRecord.Services;
+namespace NetRecord.Interfaces;
 
-public class NetRecordConfiguration : INetRecordConfiguration
+public interface INetRecordConfiguration
 {
-    #region Required Settings
+   #region Required Settings
     
     /// <summary>
     /// The service mode will decide what actions the service takes when it attempts to make a request as follows:
@@ -21,14 +17,14 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// Replay: Replay all requests sent, erroring if a saved request does not exist
     /// Bypass: Act as a normal HttpClient, without recording or replaying requests
     /// </summary>
-    public required ServiceMode Mode { get; set; }
+    public ServiceMode Mode { get; set; }
     
     /// <summary>
     /// The path for the recordings to be saved too, this is a func in case the user wants to use logic to
     /// dynamically change the path depending on what assembly the request is running from.
     /// The path this returns should be a local filepath starting from the solution root
     /// </summary>
-    public required Func<string> RecordingsDir { get; set; }
+    public Func<string> RecordingsDir { get; set; }
     
     #endregion
 
@@ -41,7 +37,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// This value will additionally be added to the end of the recording file name.
     /// </summary>
     /// <exception cref="NetRecordException">If the expression does not contain exclusively a single property call of the HttpRequestMessage</exception>
-    public Expression<Func<NetRecordRequest, object>>? FileGroupIdentifier { get; set; } = null;
+    public Expression<Func<NetRecordRequest, object>>? FileGroupIdentifier { get; set; }
 
     /// <summary>
     /// This value should be an expression body that returns a list of calls of the RequestMessage,
@@ -49,15 +45,12 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// the function will be run on both new requests and saved recordings and the values checked against eachother.
     /// By default, only the Method and URI will be used. 
     /// </summary>
-    public Func<NetRecordRequest, object?>[] UniqueIdentifiers { get; set; } = [
-        request => request.Method,
-        request => request.Uri
-    ];
+    public Func<NetRecordRequest, object?>[] UniqueIdentifiers { get; set; }
     
     /// <summary>
     /// 
     /// </summary>
-    public RequestCensors RequestCensors { get; set; } = new();
+    public RequestCensors RequestCensors { get; set; }
 
     /// <summary>
     /// The name for the recording json file that will be saved to the file path,
@@ -65,36 +58,20 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// Note that if a uniqueFileIdentifier is defined, it will be added to the file name.
     /// Secondary note that the ".json" file extension will be added automatically.
     /// </summary>
-    public Func<string> RecordingName { get; set; } = () => "NetRecordRecording";
+    public Func<string> RecordingName { get; set; }
 
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public JsonSerializerOptions JsonSerializerOptions { get; set; } = new JsonSerializerOptions()
-    {
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        Converters = { new JsonStringEnumConverter() }
-    };
+    
+    public JsonSerializerOptions JsonSerializerOptions { get; set; }
 
     /// <summary>
     /// If set to true, a NetRecordFactory will only ever generate and return a single continuous HttpClient,
     /// rather than generating a new one on every create call.
     /// </summary>
-    public bool FactoryReturnsSingleClient { get; set; } = false;
+    public bool FactoryReturnsSingleClient { get; set; }
 
     #endregion
 
-    public string GetFileName()
-    {
-        var baseName = RecordingName.Invoke();
+    internal string GetFileName();
 
-        return baseName + FileGroupIdentifier?.GetPropertyInfo().Name + ".json";
-    }
-
-    public string GetPathFromRoot()
-    {
-        var rootPath = DirectoryUtils.GetRootPath();
-        return Path.Join(rootPath, RecordingsDir.Invoke());
-    }
+    internal string GetPathFromRoot();
 }

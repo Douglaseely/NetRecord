@@ -1,13 +1,13 @@
 using NetRecord.Services;
 using NetRecord.Utils;
 using NetRecord.Utils.Enums;
+using NetRecord.Utils.Exceptions;
 using NetRecord.Utils.Models;
 
 namespace NetRecord;
 
 public class NetRecordHandler : DelegatingHandler
 {
-    private RecordFile _recordFile; 
     private NetRecordConfiguration _configuration;
 
     internal NetRecordHandler(NetRecordConfiguration configuration)
@@ -26,16 +26,23 @@ public class NetRecordHandler : DelegatingHandler
                 stopwatch.Stop();
                 await Recorder.Record(request, recordResponse, stopwatch.Elapsed, _configuration);
                 return recordResponse;
+            
             case ServiceMode.Replay:
-                break;
+                // TODO: REPLAY
+                return new HttpResponseMessage();
+            
             case ServiceMode.Auto:
-                break;
+                // TODO: REPLAY NEEDED BEFORE MORE WORK
+                var recordFile = RecordFile.GetorCreateRecordFile(_configuration);
+                // if (recordFile.Recordings.Any())
+                return new HttpResponseMessage();
+            
             case ServiceMode.Bypass:
-                break;
+                var response = await base.SendAsync(request, cancellationToken);
+                return response;
+            
+            default:
+                throw new NetRecordException("Invalid ServiceMode when attempting to check request");
         }
-
-        return new HttpResponseMessage();
     }
-
-    
 }

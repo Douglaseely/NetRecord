@@ -1,5 +1,7 @@
 using NetRecord.Services;
+using NetRecord.Utils.Exceptions;
 using NetRecord.Utils.Extensions;
+using NetRecord.Utils.Serialization;
 
 namespace NetRecord.Utils.Models;
 
@@ -11,11 +13,29 @@ internal class RecordFile
 {
     private string _filePath;
     private string _fileName;
-    public NetRecordTransaction[] Recordings;
+    public IEnumerable<NetRecordTransaction> Recordings;
 
-    public RecordFile UpdateFileWithTransaction(NetRecordTransaction transaction, NetRecordConfiguration configuration)
+    public RecordFile UpdateFileWithTransaction(NetRecordTransaction transaction, NetRecordConfiguration configuration, bool bypassCheck = false)
     {
-        var mathingRecord = Recordings.FirstOrDefault(t => t.CheckIfMatch(transaction, configuration));
+        NetRecordTransaction? matchingRecord = null;
+        if (!bypassCheck)
+        {
+            matchingRecord = Recordings.FirstOrDefault(t => t.CheckIfMatch(transaction, configuration));
+        }
+
+        if (matchingRecord is null)
+            Recordings = Recordings.Append(transaction);
+        else
+        {
+            var recordingList = Recordings.ToList();
+            recordingList.Remove(matchingRecord);
+            recordingList.Add(transaction);
+            Recordings = recordingList;
+        }
+
+        Write(configuration);
+
+        return this;
     }
 
     public static RecordFile GetorCreateRecordFile(NetRecordConfiguration configuration)
@@ -42,7 +62,18 @@ internal class RecordFile
             Recordings = recordings
         };
     }
-    
+
+    private void Write(NetRecordConfiguration configuration)
+    {
+        var fullPath = Path.Join(_filePath, _fileName);
+        var serializedFile = JsonUtils.SerializeObjectToJson(Recordings, configuration.JsonSerializerOptions);
+        if (string.IsNullOrEmpty(serializedFile))
+            throw new NetRecordException("Error while serializing request transaction");
+        
+        File.WriteAllText(fullPath, serializedFile);
+        File.AppendAllText(fullPath, Environment.NewLine);
+    }
+
     private RecordFile()
     {
         

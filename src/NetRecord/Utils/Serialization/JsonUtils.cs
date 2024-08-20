@@ -29,7 +29,7 @@ internal static class JsonUtils
 
     public static string SerializeObjectToJson(object? data, JsonSerializerOptions? options = null)
     {
-        if (data is null) throw new NetRecordException("Cannot serailize null object");
+        if (data is null) throw new NetRecordException("Cannot serialize null object");
         try
         {
             options ??= DefaultJsonOptions;

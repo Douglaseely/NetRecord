@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRecord", "src\NetRecord\NetRecord.csproj", "{63373E25-3C2F-47EF-8545-662C1A083B10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRecord.Example", "tests\NetRecord.Example\NetRecord.Example.csproj", "{59C0F643-1530-4105-9D2F-1A9FDA0B5A0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRecord.Extensions.RestSharp", "src\NetRecord.Extensions.RestSharp\NetRecord.Extensions.RestSharp.csproj", "{AAFB4646-AF96-4783-B41C-27EFC518805D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{63373E25-3C2F-47EF-8545-662C1A083B10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63373E25-3C2F-47EF-8545-662C1A083B10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63373E25-3C2F-47EF-8545-662C1A083B10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59C0F643-1530-4105-9D2F-1A9FDA0B5A0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59C0F643-1530-4105-9D2F-1A9FDA0B5A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59C0F643-1530-4105-9D2F-1A9FDA0B5A0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59C0F643-1530-4105-9D2F-1A9FDA0B5A0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAFB4646-AF96-4783-B41C-27EFC518805D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAFB4646-AF96-4783-B41C-27EFC518805D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAFB4646-AF96-4783-B41C-27EFC518805D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAFB4646-AF96-4783-B41C-27EFC518805D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
