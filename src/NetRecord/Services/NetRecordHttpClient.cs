@@ -19,6 +19,8 @@ public class NetRecordHttpClient : HttpClient
     public static NetRecordHttpClient CreateFromConfiguration(Uri baseAddress, NetRecordConfiguration configuration)
     {
         var handler = new NetRecordHandler(configuration);
-        return new NetRecordHttpClient(handler);
+        var client = new NetRecordHttpClient(handler);
+        client.BaseAddress = baseAddress;
+        return client;
     }
 }

@@ -13,6 +13,9 @@ public class NetRecordHandler : DelegatingHandler
     internal NetRecordHandler(NetRecordConfiguration configuration)
     {
         _configuration = configuration;
+        
+        // In case we do make a real request, we need an inner handler
+        InnerHandler = new HttpClientHandler();
     }
     
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
