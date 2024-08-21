@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using NetRecord.Services;
 using NetRecord.Utils.Enums;
 using NetRecord.Utils.Extensions;
 
@@ -7,8 +6,9 @@ namespace NetRecord.Utils.Models;
 
 public class NetRecordRequest : NetRecordElement
 {
-    public HttpMethod Method;
-    
+    [JsonPropertyName("Method")]
+    public HttpMethod Method { get; set; }
+
     [JsonPropertyName("Body")]
     public string? Body { get; set; }
     
@@ -34,5 +34,11 @@ public class NetRecordRequest : NetRecordElement
     /// as if its different the recording cannot be parsed
     /// </summary>
     [JsonPropertyName("BodyContentType")]
-    private string? BodyContentTypeString { get; set; }
+    public string? BodyContentTypeString { get; set; }
+    
+    [JsonConstructor]
+    internal NetRecordRequest()
+    {
+        
+    }
 }

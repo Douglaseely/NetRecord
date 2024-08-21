@@ -1,3 +1,4 @@
+using System.Text.Json;
 using NetRecord.Utils.Enums;
 using NetRecord.Utils.Serialization;
 
@@ -17,9 +18,9 @@ internal static class ContentTypeExtensions
         };
     }
     
-    public static RequestBodyContentType DetermineContentType(string content)
+    public static RequestBodyContentType DetermineContentType(string content, JsonSerializerOptions options)
     {
-        if (IsJson(content))
+        if (IsJson(content, options))
         {
             return RequestBodyContentType.Json;
         }
@@ -29,7 +30,6 @@ internal static class ContentTypeExtensions
             return RequestBodyContentType.Xml;
         }
 
-        // ReSharper disable once ConvertIfStatementToReturnStatement
         if (IsHtml(content))
         {
             return RequestBodyContentType.Html;
@@ -43,12 +43,12 @@ internal static class ContentTypeExtensions
         return content.Contains("<html", StringComparison.CurrentCultureIgnoreCase);
     }
 
-    private static bool IsJson(string content)
+    private static bool IsJson(string content, JsonSerializerOptions options)
     {
         try
         {
             // try to serialize the string as JSON to an object
-            JsonUtils.DeserializeJsonToObject<object>(content);
+            JsonUtils.DeserializeJsonToObject<object>(content, options);
             return true;
         }
         catch (Exception)

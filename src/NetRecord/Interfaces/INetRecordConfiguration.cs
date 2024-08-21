@@ -37,7 +37,7 @@ public interface INetRecordConfiguration
     /// This value will additionally be added to the end of the recording file name.
     /// </summary>
     /// <exception cref="NetRecordException">If the expression does not contain exclusively a single property call of the HttpRequestMessage</exception>
-    public Expression<Func<NetRecordRequest, object>>? FileGroupIdentifier { get; set; }
+    public Expression<Func<NetRecordTransaction, object>>? FileGroupIdentifier { get; set; }
 
     /// <summary>
     /// This value should be an expression body that returns a list of calls of the RequestMessage,
@@ -45,7 +45,7 @@ public interface INetRecordConfiguration
     /// the function will be run on both new requests and saved recordings and the values checked against eachother.
     /// By default, only the Method and URI will be used. 
     /// </summary>
-    public Func<NetRecordRequest, object?>[] UniqueIdentifiers { get; set; }
+    public Func<NetRecordTransaction, object?>[] UniqueIdentifiers { get; set; }
     
     /// <summary>
     /// 

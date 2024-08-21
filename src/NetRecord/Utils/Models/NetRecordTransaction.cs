@@ -1,13 +1,21 @@
+using System.Text.Json.Serialization;
 using NetRecord.Services;
 
 namespace NetRecord.Utils.Models;
 
-internal class NetRecordTransaction
+public class NetRecordTransaction
 {
-    public NetRecordRequest Request;
-    public NetRecordResponse Response;
-    public DateTime RecordedAt;
-    public TimeSpan ElapsedTime;
+    [JsonPropertyName("Request")]
+    public NetRecordRequest Request { get; set; }
+
+    [JsonPropertyName("Response")] 
+    public NetRecordResponse Response { get; set; }
+    
+    [JsonPropertyName("RecordedAt")]
+    public DateTime RecordedAt { get; set; }
+    
+    [JsonPropertyName("ElapsedTime")]
+    public TimeSpan ElapsedTime { get; set; }
 
     internal bool CheckIfMatch(NetRecordTransaction transaction, NetRecordConfiguration configuration)
     {
@@ -21,12 +29,20 @@ internal class NetRecordTransaction
 
         foreach (var identifierFunc in configuration.UniqueIdentifiers)
         {
-            if (identifierFunc.Invoke(request) != identifierFunc.Invoke(Request))
+            var thisValue = identifierFunc.Invoke(this);
+            var transactionValue = identifierFunc(transaction);
+            // This is a weird bit that has to be done because comparison between two strings cast to objects doesn't working with ==
+            if ((thisValue is null && thisValue != transactionValue) || ! (thisValue?.Equals(transactionValue) ?? true))
             {
                 return false;
             }
         }
 
         return true;
+    }
+    
+    [JsonConstructor]
+    internal NetRecordTransaction()
+    {
     }
 }

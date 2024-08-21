@@ -8,10 +8,10 @@ using NetRecord.Utils.Extensions;
 
 namespace NetRecord.Utils.Models;
 
-internal class NetRecordResponse : NetRecordElement
+public class NetRecordResponse : NetRecordElement
 {
         [JsonPropertyName("Body")]
-        internal string? Body { get; set; }
+        public string? Body { get; set; }
 
         [JsonIgnore]
         internal RequestBodyContentType? BodyContentType
@@ -22,28 +22,28 @@ internal class NetRecordResponse : NetRecordElement
 
        
         [JsonPropertyName("ContentHeaders")]
-        internal IDictionary<string, string>? ContentHeaders { get; set; }
+        public IDictionary<string, string>? ContentHeaders { get; set; }
         
-        [JsonPropertyName("HttpVersion")]
-        internal Version HttpVersion { get; set; }
+        // [JsonPropertyName("HttpVersion")]
+        // public Version HttpVersion { get; set; }
         
         [JsonPropertyName("ResponseHeaders")]
-        internal IDictionary<string, string>? ResponseHeaders { get; set; }
+        public IDictionary<string, string>? ResponseHeaders { get; set; }
         
         [JsonPropertyName("StatusCode")]
-        internal HttpStatusCode? StatusCode { get; set; }
+        public HttpStatusCode? StatusCode { get; set; }
         
         [JsonPropertyName("StatusMessage")]
-        internal string? StatusMessage { get; set; }
+        public string? StatusMessage { get; set; }
         
         [JsonPropertyName("BodyContentType")]
-        private string? BodyContentTypeString { get; set; }
+        public string? BodyContentTypeString { get; set; }
 
-        internal HttpResponseMessage ToHttpResponseMessage(HttpRequestMessage requestMessage)
+        public HttpResponseMessage ToHttpResponseMessage(HttpRequestMessage requestMessage)
         {
             var result = new HttpResponseMessage(StatusCode!.Value);
             result.ReasonPhrase = StatusMessage;
-            result.Version = HttpVersion;
+            // result.Version = HttpVersion;
             
             foreach (var header in ResponseHeaders ?? new Dictionary<string, string>()) 
                 result.Headers.TryAddWithoutValidation(header.Key, header.Value.ToString());
@@ -59,5 +59,11 @@ internal class NetRecordResponse : NetRecordElement
             result.Content = content;
             result.RequestMessage = requestMessage;
             return result;
+        }
+        
+        [JsonConstructor]
+        internal NetRecordResponse()
+        {
+            
         }
 }

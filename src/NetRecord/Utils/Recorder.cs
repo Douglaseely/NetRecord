@@ -16,8 +16,8 @@ internal static class Recorder
     /// <returns>The RecordFile that is either passed, found, or created</returns>
     public static async Task<RecordFile> Record(HttpRequestMessage request, HttpResponseMessage? responseMessage, TimeSpan elapsedTime, NetRecordConfiguration configuration, RecordFile? recordFile = null)
     {
-            var netRecordRequest = await RequestConverter.ToRequestAsync(request, configuration.RequestCensors);
-            var netRecordResponse = await ResponseConverter.ToResponseAsync(responseMessage, configuration.RequestCensors);
+            var netRecordRequest = await RequestConverter.ToRequestAsync(request, configuration.RequestCensors, configuration.JsonSerializerOptions);
+            var netRecordResponse = await ResponseConverter.ToResponseAsync(responseMessage, configuration.RequestCensors, configuration.JsonSerializerOptions);
             var httpTransaction = new NetRecordTransaction 
             {
                 Request = netRecordRequest,

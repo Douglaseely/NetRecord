@@ -41,7 +41,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// This value will additionally be added to the end of the recording file name.
     /// </summary>
     /// <exception cref="NetRecordException">If the expression does not contain exclusively a single property call of the HttpRequestMessage</exception>
-    public Expression<Func<NetRecordRequest, object>>? FileGroupIdentifier { get; set; } = null;
+    public Expression<Func<NetRecordTransaction, object>>? FileGroupIdentifier { get; set; } = null;
 
     /// <summary>
     /// This value should be an expression body that returns a list of calls of the RequestMessage,
@@ -49,13 +49,13 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// the function will be run on both new requests and saved recordings and the values checked against eachother.
     /// By default, only the Method and URI will be used. 
     /// </summary>
-    public Func<NetRecordRequest, object?>[] UniqueIdentifiers { get; set; } = [
-        request => request.Method,
-        request => request.Uri
+    public Func<NetRecordTransaction, object?>[] UniqueIdentifiers { get; set; } = [
+        request => request.Request.Method.Method,
+        request => request.Request.Uri
     ];
     
     /// <summary>
-    /// 
+    /// The censors to be applied to both the requests and responses saved, hiding sensitive data.
     /// </summary>
     public RequestCensors RequestCensors { get; set; } = new();
 
@@ -69,11 +69,12 @@ public class NetRecordConfiguration : INetRecordConfiguration
 
 
     /// <summary>
-    /// 
+    /// The jsonSerializerOptions that ALL serialization and deserialization will use
     /// </summary>
-    public JsonSerializerOptions JsonSerializerOptions { get; set; } = new JsonSerializerOptions()
+    public JsonSerializerOptions JsonSerializerOptions { get; set; } = new JsonSerializerOptions
     {
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        WriteIndented = true,
         Converters = { new JsonStringEnumConverter() }
     };
 

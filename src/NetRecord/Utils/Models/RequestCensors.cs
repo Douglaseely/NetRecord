@@ -1,5 +1,6 @@
 using System.Collections.Specialized;
 using System.Runtime.Serialization;
+using System.Text.Json;
 using System.Web;
 using NetRecord.Utils.Consts;
 using NetRecord.Utils.Enums;
@@ -148,7 +149,7 @@ public class RequestCensors
         /// <param name="contentType"> RequestBodyContentType enum indicating what type of content body is.</param>
         /// <returns>Censored string representation of request body.</returns>
         /// <exception cref="SerializeException">Could not serialize data to apply censors.</exception>
-        internal string ApplyBodyParametersCensors(string body,  RequestBodyContentType? contentType)
+        internal string ApplyBodyParametersCensors(string body,  RequestBodyContentType? contentType, JsonSerializerOptions options)
         {
             if (contentType == null) throw new NetRecordException("Cannot determine content type of response body, unable to apply censors.");
 
@@ -174,7 +175,7 @@ public class RequestCensors
                     case  RequestBodyContentType.Xml:
                         return body; // XML parsing is not supported yet, so we can't censor XML bodies.
                     case  RequestBodyContentType.Json:
-                        return CensorJsonData(body, _censorText, _bodyElementsToCensor);
+                        return CensorJsonData(body, _censorText, _bodyElementsToCensor, options);
                     default:
                         throw new NetRecordException("Unrecognized content type: " + contentType);
                 }
@@ -337,22 +338,22 @@ public class RequestCensors
         /// <param name="censorText">Test to use to replace censored elements.</param>
         /// <param name="elementsToCensors">List of elements to censor.</param>
         /// <returns>A censored JSON string.</returns>
-        public static string CensorJsonData(string data, string censorText, IReadOnlyCollection<RequestCensorElement> elementsToCensors)
+        public static string CensorJsonData(string data, string censorText, IReadOnlyCollection<RequestCensorElement> elementsToCensors, JsonSerializerOptions options)
         {
             try
             {
-                var jsonDictionary = JsonUtils.DeserializeJsonToObject<Dictionary<string, object>>(data);
+                var jsonDictionary = JsonUtils.DeserializeJsonToObject<Dictionary<string, object>>(data, options);
                 var censoredJsonDictionary = ApplyDataCensors(jsonDictionary, censorText, elementsToCensors);
-                return JsonUtils.SerializeObjectToJson(censoredJsonDictionary);
+                return JsonUtils.SerializeObjectToJson(censoredJsonDictionary, options);
             }
             catch (Exception)
             {
                 // body is not a JSON dictionary
                 try
                 {
-                    var jsonList = JsonUtils.DeserializeJsonToObject<List<object>>(data);
+                    var jsonList = JsonUtils.DeserializeJsonToObject<List<object>>(data, options);
                     var censoredJsonList = ApplyDataCensors(jsonList, censorText, elementsToCensors);
-                    return JsonUtils.SerializeObjectToJson(censoredJsonList);
+                    return JsonUtils.SerializeObjectToJson(censoredJsonList, options);
                 }
                 catch
                 {
