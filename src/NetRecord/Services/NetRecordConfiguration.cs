@@ -138,18 +138,18 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// </summary>
     /// <param name="mode">The RecordingMode that will be used to decide how requests are handled</param>
     /// <param name="recordingDir">The directory that will all recording files will be saved too</param>
+    /// <param name="recordingName">The base name for the recording files saved.</param>
     /// <param name="fileGroupIdentifier">The identifier value that will be used to match requests into files</param>
     /// <param name="uniqueIdentifiers">The values that will be used to match two requests to each other for record rewriting and replaying</param>
     /// <param name="requestCensors">The censors that will hide and remove data from requests before saving</param>
-    /// <param name="recordingName">The base name for the recording files saved.</param>
     /// <returns>A newly created configuration</returns>
     public static NetRecordConfiguration Create(
         ServiceMode mode,
         Func<string> recordingDir,
+        Func<string>? recordingName = null,
         Expression<Func<NetRecordTransaction, object>>? fileGroupIdentifier = null,
         Func<NetRecordRequest, object>[]? uniqueIdentifiers = null,
-        RequestCensors? requestCensors = null,
-        Func<string>? recordingName = null
+        RequestCensors? requestCensors = null
     )
     {
         var config = new NetRecordConfiguration { Mode = mode, RecordingsDir = recordingDir };
@@ -174,18 +174,18 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// </summary>
     /// <param name="mode">The RecordingMode that will be used to decide how requests are handled</param>
     /// <param name="recordingDir">The directory that will all recording files will be saved too</param>
+    /// <param name="recordingName">The base name for the recording files saved.</param>
     /// <param name="fileGroupIdentifier">The identifier value that will be used to match requests into files</param>
     /// <param name="uniqueIdentifiers">The values that will be used to match two requests to each other for record rewriting and replaying</param>
     /// <param name="requestCensors">The censors that will hide and remove data from requests before saving</param>
-    /// <param name="recordingName">The base name for the recording files saved.</param>
     /// <returns>A newly created configuration</returns>
     public static NetRecordConfiguration Create(
         ServiceMode mode,
         Func<string> recordingDir,
+        string recordingName,
         Expression<Func<NetRecordTransaction, object>>? fileGroupIdentifier = null,
         Func<NetRecordRequest, object>[]? uniqueIdentifiers = null,
-        RequestCensors? requestCensors = null,
-        string? recordingName = null
+        RequestCensors? requestCensors = null
     )
     {
         var config = new NetRecordConfiguration { Mode = mode, RecordingsDir = recordingDir };
@@ -210,18 +210,18 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// </summary>
     /// <param name="mode">The RecordingMode that will be used to decide how requests are handled</param>
     /// <param name="recordingDir">The directory that will all recording files will be saved too</param>
+    /// <param name="recordingName">The base name for the recording files saved.</param>
     /// <param name="fileGroupIdentifier">The identifier value that will be used to match requests into files</param>
     /// <param name="uniqueIdentifiers">The values that will be used to match two requests to each other for record rewriting and replaying</param>
     /// <param name="requestCensors">The censors that will hide and remove data from requests before saving</param>
-    /// <param name="recordingName">The base name for the recording files saved.</param>
     /// <returns>A newly created configuration</returns>
     public static NetRecordConfiguration Create(
         ServiceMode mode,
         string recordingDir,
+        Func<string>? recordingName = null,
         Expression<Func<NetRecordTransaction, object>>? fileGroupIdentifier = null,
         Func<NetRecordRequest, object>[]? uniqueIdentifiers = null,
-        RequestCensors? requestCensors = null,
-        Func<string>? recordingName = null
+        RequestCensors? requestCensors = null
     )
     {
         var config = new NetRecordConfiguration { Mode = mode, RecordingsDir = () => recordingDir };
@@ -246,18 +246,18 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// </summary>
     /// <param name="mode">The RecordingMode that will be used to decide how requests are handled</param>
     /// <param name="recordingDir">The directory that will all recording files will be saved too</param>
+    /// <param name="recordingName">The base name for the recording files saved.</param>
     /// <param name="fileGroupIdentifier">The identifier value that will be used to match requests into files</param>
     /// <param name="uniqueIdentifiers">The values that will be used to match two requests to each other for record rewriting and replaying</param>
     /// <param name="requestCensors">The censors that will hide and remove data from requests before saving</param>
-    /// <param name="recordingName">The base name for the recording files saved.</param>
     /// <returns>A newly created configuration</returns>
     public static NetRecordConfiguration Create(
         ServiceMode mode,
         string recordingDir,
+        string recordingName,
         Expression<Func<NetRecordTransaction, object>>? fileGroupIdentifier = null,
         Func<NetRecordRequest, object>[]? uniqueIdentifiers = null,
-        RequestCensors? requestCensors = null,
-        string? recordingName = null
+        RequestCensors? requestCensors = null
     )
     {
         var config = new NetRecordConfiguration { Mode = mode, RecordingsDir = () => recordingDir };

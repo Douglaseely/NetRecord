@@ -17,12 +17,9 @@ public class Tests
     {
         var services = new ServiceCollection();
 
-        var config = new NetRecordConfiguration()
-        {
-            Mode = ServiceMode.Record,
-            RecordingsDir = () => "./static",
-            FileGroupIdentifier = transaction => transaction.Request.Method
-        };
+        var config = NetRecordConfiguration.Create(ServiceMode.Record, "./static",
+            fileGroupIdentifier: transaction => transaction.Request.Method);
+        
         services.AddNetRecordHttpClient("client", "https://advocacyday.dev", config);
 
         ServiceProvider = services.BuildServiceProvider();
