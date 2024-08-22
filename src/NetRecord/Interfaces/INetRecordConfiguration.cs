@@ -45,7 +45,7 @@ public interface INetRecordConfiguration
     /// the function will be run on both new requests and saved recordings and the values checked against eachother.
     /// By default, only the Method and URI will be used. 
     /// </summary>
-    public Func<NetRecordTransaction, object?>[] UniqueIdentifiers { get; set; }
+    public Func<NetRecordRequest, object?>[] UniqueIdentifiers { get; set; }
     
     /// <summary>
     /// 
@@ -71,7 +71,7 @@ public interface INetRecordConfiguration
 
     #endregion
 
-    internal string GetFileName();
+    internal string GetFileName(NetRecordTransaction transaction);
 
     internal string GetPathFromRoot();
 }

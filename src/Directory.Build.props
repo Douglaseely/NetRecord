@@ -2,5 +2,7 @@
     <PropertyGroup>
         <Version>1.0.0</Version>
         <IsPackable>true</IsPackable>
+        <Authors>Douglas Seely (douglaseelyjr@gmail.com)</Authors>
+        <RepositoryUrl>https://github.com/douglaseely/NetRecord</RepositoryUrl>
     </PropertyGroup>
 </Project>

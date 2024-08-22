@@ -26,7 +26,7 @@ internal static class Recorder
                 ElapsedTime = elapsedTime 
             };
             
-            recordFile ??= RecordFile.GetorCreateRecordFile(configuration);
+            recordFile ??= RecordFile.GetorCreateRecordFile(configuration, httpTransaction);
             return recordFile.UpdateFileWithTransaction(httpTransaction, configuration);
     } 
 }

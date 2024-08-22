@@ -36,7 +36,8 @@ public class NetRecordHandler : DelegatingHandler
             
             case ServiceMode.Auto:
                 // TODO: REPLAY NEEDED BEFORE MORE WORK
-                var recordFile = RecordFile.GetorCreateRecordFile(_configuration);
+                var netRecordRequest = await RequestConverter.ToRequestAsync(request, _configuration.RequestCensors, _configuration.JsonSerializerOptions);
+                var recordFile = RecordFile.GetorCreateRecordFile(_configuration, new NetRecordTransaction {Request = netRecordRequest});
                 // if (recordFile.Recordings.Any())
                 return new HttpResponseMessage();
             

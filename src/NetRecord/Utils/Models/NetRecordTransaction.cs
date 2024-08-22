@@ -29,8 +29,8 @@ public class NetRecordTransaction
 
         foreach (var identifierFunc in configuration.UniqueIdentifiers)
         {
-            var thisValue = identifierFunc.Invoke(this);
-            var transactionValue = identifierFunc(transaction);
+            var thisValue = identifierFunc.Invoke(Request);
+            var transactionValue = identifierFunc.Invoke(request);
             // This is a weird bit that has to be done because comparison between two strings cast to objects doesn't working with ==
             if ((thisValue is null && thisValue != transactionValue) || ! (thisValue?.Equals(transactionValue) ?? true))
             {

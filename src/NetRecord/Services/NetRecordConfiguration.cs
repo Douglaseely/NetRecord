@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using NetRecord.Interfaces;
 using NetRecord.Utils;
 using NetRecord.Utils.Enums;
+using NetRecord.Utils.Exceptions;
 using NetRecord.Utils.Extensions;
 using NetRecord.Utils.Models;
 
@@ -47,11 +48,11 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// This value should be an expression body that returns a list of calls of the RequestMessage,
     /// that will be used to match any sent request with a request recording,
     /// the function will be run on both new requests and saved recordings and the values checked against eachother.
-    /// By default, only the Method and URI will be used. 
+    /// By default, only the request Method and URI will be used. 
     /// </summary>
-    public Func<NetRecordTransaction, object?>[] UniqueIdentifiers { get; set; } = [
-        request => request.Request.Method.Method,
-        request => request.Request.Uri
+    public Func<NetRecordRequest, object?>[] UniqueIdentifiers { get; set; } = [
+        request => request.Method.Method,
+        request => request.Uri
     ];
     
     /// <summary>
@@ -86,16 +87,43 @@ public class NetRecordConfiguration : INetRecordConfiguration
 
     #endregion
 
-    public string GetFileName()
+    public string GetFileName(NetRecordTransaction transaction)
     {
         var baseName = RecordingName.Invoke();
 
-        return baseName + FileGroupIdentifier?.GetPropertyInfo().Name + ".json";
+        return baseName + GetFileNameExtension(transaction) + ".json";
     }
 
     public string GetPathFromRoot()
     {
         var rootPath = DirectoryUtils.GetRootPath();
         return Path.Join(rootPath, RecordingsDir.Invoke());
+    }
+
+    public string GetFileNameExtension(NetRecordTransaction transaction)
+    {
+        // If we aren't grouping the file, we don't need to add anything
+        if (FileGroupIdentifier is null)
+            return "";
+        
+        var fileExtensionString = "_" + FileGroupIdentifier.GetPropertyInfo().Name + "_";
+
+        var groupingKey = FileGroupIdentifier?.Compile().Invoke(transaction).ToString();
+        if (groupingKey is null)
+            throw new NetRecordException("No value in file group identifier");
+
+        if (groupingKey.Length > 32)
+        {
+            var byteArray = System.Text.Encoding.ASCII.GetBytes(groupingKey);
+            var hashedKey = Convert.ToBase64String(byteArray);
+
+            fileExtensionString += hashedKey;
+        }
+        else
+        {
+            fileExtensionString += groupingKey;
+        }
+
+        return fileExtensionString;
     }
 }

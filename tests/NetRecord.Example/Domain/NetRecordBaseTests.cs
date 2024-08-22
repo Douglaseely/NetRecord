@@ -20,7 +20,8 @@ public class Tests
         var config = new NetRecordConfiguration()
         {
             Mode = ServiceMode.Record,
-            RecordingsDir = () => "./static"
+            RecordingsDir = () => "./static",
+            FileGroupIdentifier = transaction => transaction.Request.Method
         };
         services.AddNetRecordHttpClient("client", "https://advocacyday.dev", config);
 

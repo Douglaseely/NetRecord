@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Text.Json;
 using NetRecord.Services;
 using NetRecord.Utils.Exceptions;
@@ -39,10 +40,10 @@ internal class RecordFile
         return this;
     }
 
-    public static RecordFile GetorCreateRecordFile(NetRecordConfiguration configuration)
+    public static RecordFile GetorCreateRecordFile(NetRecordConfiguration configuration, NetRecordTransaction transaction)
     {
         var filePath = configuration.GetPathFromRoot();
-        var fileName = configuration.GetFileName();
+        var fileName = configuration.GetFileName(transaction);
         var fullPath = Path.Join(filePath, fileName);
 
         return File.Exists(fullPath) 
