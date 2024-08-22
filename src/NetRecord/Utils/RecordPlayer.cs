@@ -1,6 +1,3 @@
 namespace NetRecord.Utils;
 
-public static class RecordPlayer
-{
-    
-}
+public static class RecordPlayer { }

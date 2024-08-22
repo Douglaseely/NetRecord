@@ -11,20 +11,20 @@ public class NetRecordRequest : NetRecordElement
 
     [JsonPropertyName("Body")]
     public string? Body { get; set; }
-    
+
     [JsonIgnore]
     internal RequestBodyContentType? BodyContentType
     {
         get => ContentTypeExtensions.FromString(BodyContentTypeString);
         set => BodyContentTypeString = value?.ToString();
     }
-    
+
     [JsonPropertyName("ContentHeaders")]
     public IDictionary<string, string>? ContentHeaders { get; set; }
-    
+
     [JsonPropertyName("RequestHeaders")]
     public IDictionary<string, string> RequestHeaders { get; set; }
-    
+
     [JsonPropertyName("Uri")]
     public string? Uri { get; set; }
 
@@ -35,10 +35,7 @@ public class NetRecordRequest : NetRecordElement
     /// </summary>
     [JsonPropertyName("BodyContentType")]
     public string? BodyContentTypeString { get; set; }
-    
+
     [JsonConstructor]
-    internal NetRecordRequest()
-    {
-        
-    }
+    internal NetRecordRequest() { }
 }

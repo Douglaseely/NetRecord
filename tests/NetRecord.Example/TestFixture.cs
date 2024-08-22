@@ -5,12 +5,11 @@ using NUnit.Framework;
 namespace NetRecord.Example;
 
 [SetUpFixture]
-public class TestFixture 
+public class TestFixture
 {
     public static TestFixture Instance { get; private set; }
 
     public IServiceProvider ServiceProvider { get; private set; }
-
 
     public List<TestContext.ResultAdapter> FailedTests { get; }
 

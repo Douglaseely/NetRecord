@@ -8,8 +8,14 @@ namespace NetRecord.Interfaces;
 
 public interface INetRecordConfiguration
 {
-   #region Required Settings
-    
+    #region Required Settings
+
+    /// <summary>
+    /// Defines what HttpClient these configuration settings are associated with.
+    /// Automatically set and handled within NetRecord when using its extension methods.
+    /// </summary>
+    internal string ClientName { get; set; }
+
     /// <summary>
     /// The service mode will decide what actions the service takes when it attempts to make a request as follows:
     /// Auto: Try to find and use a recorded request if one exists, or make and record the request if it does not
@@ -18,14 +24,14 @@ public interface INetRecordConfiguration
     /// Bypass: Act as a normal HttpClient, without recording or replaying requests
     /// </summary>
     public ServiceMode Mode { get; set; }
-    
+
     /// <summary>
     /// The path for the recordings to be saved too, this is a func in case the user wants to use logic to
     /// dynamically change the path depending on what assembly the request is running from.
     /// The path this returns should be a local filepath starting from the solution root
     /// </summary>
     public Func<string> RecordingsDir { get; set; }
-    
+
     #endregion
 
     #region Optional Settings
@@ -43,12 +49,12 @@ public interface INetRecordConfiguration
     /// This value should be an expression body that returns a list of calls of the RequestMessage,
     /// that will be used to match any sent request with a request recording,
     /// the function will be run on both new requests and saved recordings and the values checked against eachother.
-    /// By default, only the Method and URI will be used. 
+    /// By default, only the Method and URI will be used.
     /// </summary>
     public Func<NetRecordRequest, object?>[] UniqueIdentifiers { get; set; }
-    
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public RequestCensors RequestCensors { get; set; }
 
@@ -60,7 +66,6 @@ public interface INetRecordConfiguration
     /// </summary>
     public Func<string> RecordingName { get; set; }
 
-    
     public JsonSerializerOptions JsonSerializerOptions { get; set; }
 
     /// <summary>

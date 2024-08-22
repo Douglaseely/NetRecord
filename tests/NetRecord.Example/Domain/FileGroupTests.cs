@@ -1,6 +1,3 @@
 namespace NetRecord.Example.Domain;
 
-public class FileGroupTests
-{
-    
-}
+public class FileGroupTests { }

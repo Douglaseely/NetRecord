@@ -7,7 +7,8 @@ public class NetRecordElement
 {
     internal string ToJson(params JsonConverter[] converters)
     {
-        if (this == null) throw new Exception("No object to serialize");
+        if (this == null)
+            throw new Exception("No object to serialize");
 
         // modify settings so elements will be ordered
         var options = new JsonSerializerOptions

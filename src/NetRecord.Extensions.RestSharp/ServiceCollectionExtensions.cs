@@ -1,29 +1,49 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using NetRecord.Services;
 using RestSharp;
 
-namespace NetRecord.Extensions.RestSharp;
+namespace NetRecord.Extensions;
 
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// 
+    /// Creates and adds an IRestClient to the IServiceCollection that utilizes the passed NetRecordHttpClient
     /// </summary>
-    /// <param name=""></param>
-    /// <param name="configuration"></param>
-    /// <returns></returns>
-    public static IServiceCollection AddNetRecordRestClient(NetRecordHttpClient httpClient, NetRecordConfiguration configuration, RestClientOptions? options = null)
+    /// <param name="httpClient">The HttpClient that the RestClient will have injected into it</param>
+    /// <param name="options">Optional RestClientOptions that will be passed into the RestClient</param>
+    public static IServiceCollection AddNetRecordRestClient(
+        this IServiceCollection services,
+        NetRecordHttpClient httpClient,
+        RestClientOptions? options = null
+    )
     {
-        
+        var restClient = new RestClient(httpClient, options);
+        services.TryAddSingleton<IRestClient>(restClient);
+
+        return services;
     }
-    
+
     /// <summary>
-    /// 
+    /// Creates and add an IRestClient to the IServiceCollection, after creating a new NetRecordHttpClient using the passed Uri and configuration
     /// </summary>
-    /// <param name="configuration">The configuration used by the client</param>
-    public static IServiceCollection AddNetRecordRestClient(Uri baseAddress, NetRecordConfiguration configuration, RestClientOptions? options = null)
+    /// <param name="baseAddress">The Uri to use for the HttpClient</param>
+    /// <param name="configuration">The configuration settings that will be injected into the HttpClient</param>
+    /// <param name="options">Optional RestClientOptions that will be passed into the RestClient</param>
+    /// <returns></returns>
+    public static IServiceCollection AddNetRecordRestClient(
+        this IServiceCollection services,
+        Uri baseAddress,
+        NetRecordConfiguration configuration,
+        RestClientOptions? options = null
+    )
     {
-        var httpClient = NetRecordHttpClient.CreateFromConfiguration(configuration);
+        var httpClient = NetRecordHttpClient.CreateFromConfiguration(baseAddress, configuration);
         httpClient.BaseAddress = baseAddress;
+
+        var restClient = new RestClient(httpClient, options);
+        services.TryAddSingleton<IRestClient>(restClient);
+
+        return services;
     }
 }

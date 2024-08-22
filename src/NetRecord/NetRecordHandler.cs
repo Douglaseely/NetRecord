@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetRecord.Services;
 using NetRecord.Utils;
 using NetRecord.Utils.Enums;
@@ -13,14 +14,17 @@ public class NetRecordHandler : DelegatingHandler
     internal NetRecordHandler(NetRecordConfiguration configuration)
     {
         _configuration = configuration;
-        
+
         // In case we do make a real request, we need an inner handler
         InnerHandler = new HttpClientHandler();
     }
-    
-    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+
+    protected override async Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
+        CancellationToken cancellationToken
+    )
     {
-        var stopwatch = new System.Diagnostics.Stopwatch();
+        var stopwatch = new Stopwatch();
         switch (_configuration.Mode)
         {
             case ServiceMode.Record:
@@ -29,24 +33,33 @@ public class NetRecordHandler : DelegatingHandler
                 stopwatch.Stop();
                 await Recorder.Record(request, recordResponse, stopwatch.Elapsed, _configuration);
                 return recordResponse;
-            
+
             case ServiceMode.Replay:
                 // TODO: REPLAY
                 return new HttpResponseMessage();
-            
+
             case ServiceMode.Auto:
                 // TODO: REPLAY NEEDED BEFORE MORE WORK
-                var netRecordRequest = await RequestConverter.ToRequestAsync(request, _configuration.RequestCensors, _configuration.JsonSerializerOptions);
-                var recordFile = RecordFile.GetorCreateRecordFile(_configuration, new NetRecordTransaction {Request = netRecordRequest});
+                var netRecordRequest = await RequestConverter.ToRequestAsync(
+                    request,
+                    _configuration.RequestCensors,
+                    _configuration.JsonSerializerOptions
+                );
+                var recordFile = RecordFile.GetorCreateRecordFile(
+                    _configuration,
+                    new NetRecordTransaction { Request = netRecordRequest }
+                );
                 // if (recordFile.Recordings.Any())
                 return new HttpResponseMessage();
-            
+
             case ServiceMode.Bypass:
                 var response = await base.SendAsync(request, cancellationToken);
                 return response;
-            
+
             default:
-                throw new NetRecordException("Invalid ServiceMode when attempting to check request");
+                throw new NetRecordException(
+                    "Invalid ServiceMode when attempting to check request"
+                );
         }
     }
 }

@@ -21,7 +21,9 @@ public static class ExpressionExtensions
                 Exp = operand;
             }
             else
-                throw new NetRecordException($"Lambda {propertyLambda} is not a property expression");
+                throw new NetRecordException(
+                    $"Lambda {propertyLambda} is not a property expression"
+                );
         }
         else if (propertyLambda.Body is MemberExpression body)
         {

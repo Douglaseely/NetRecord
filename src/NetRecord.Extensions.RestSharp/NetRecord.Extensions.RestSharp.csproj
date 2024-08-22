@@ -4,6 +4,9 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>NetRecord.Extensions</RootNamespace>
+        <PackageDescription>RestSharp service extentions for NetRecord</PackageDescription>
+        <AssemblyName>Douglaseely.NetRecord.Extensions.RestSharp</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

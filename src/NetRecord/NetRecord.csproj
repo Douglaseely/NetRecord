@@ -5,6 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>NetRecord</RootNamespace>
+        <PackageDescription>An httpClient replacement that can record and replay requests with high configurability</PackageDescription>
+        <AssemblyName>Douglaseely.NetRecord</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

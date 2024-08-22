@@ -4,14 +4,14 @@ using NetRecord.Services.Extensions;
 using NetRecord.Utils.Enums;
 using NUnit.Framework;
 
-namespace NetRecord.Example;
+namespace NetRecord.Example.Domain;
 
 public class Tests
 {
     private IServiceProvider ServiceProvider { get; set; }
 
     private IHttpClientFactory _httpFactory;
-        
+
     [OneTimeSetUp]
     public void RunBeforeAnyTests()
     {
@@ -27,7 +27,7 @@ public class Tests
 
         ServiceProvider = services.BuildServiceProvider();
     }
-    
+
     [SetUp]
     public void Setup()
     {

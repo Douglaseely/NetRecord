@@ -8,7 +8,8 @@ internal static class ContentTypeExtensions
 {
     public static RequestBodyContentType? FromString(string? contentType)
     {
-        if (contentType == null) return null;
+        if (contentType == null)
+            return null;
         return contentType.ToLower() switch
         {
             "json" => RequestBodyContentType.Json,
@@ -17,8 +18,11 @@ internal static class ContentTypeExtensions
             var _ => RequestBodyContentType.Text
         };
     }
-    
-    public static RequestBodyContentType DetermineContentType(string content, JsonSerializerOptions options)
+
+    public static RequestBodyContentType DetermineContentType(
+        string content,
+        JsonSerializerOptions options
+    )
     {
         if (IsJson(content, options))
         {
@@ -37,7 +41,7 @@ internal static class ContentTypeExtensions
 
         return RequestBodyContentType.Text;
     }
-    
+
     private static bool IsHtml(string content)
     {
         return content.Contains("<html", StringComparison.CurrentCultureIgnoreCase);

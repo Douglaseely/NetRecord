@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using NUnit.Framework.Internal;
 
 namespace NetRecord.Example;
 
@@ -45,8 +44,11 @@ public abstract class TestSetup
             "This function should be implemented in a derived test class."
         );
     }
-    
-    private static IServiceCollection RemoveServices(IServiceCollection services, params Type[] except)
+
+    private static IServiceCollection RemoveServices(
+        IServiceCollection services,
+        params Type[] except
+    )
     {
         var serviceList = services.ToList().Where(service => !except.Contains(service.ServiceType));
 
@@ -57,7 +59,7 @@ public abstract class TestSetup
 
         return services;
     }
-    
+
     private static IServiceCollection RemoveService(IServiceCollection services, Type type)
     {
         var existingService = services.FirstOrDefault(d => d.ServiceType == type);
