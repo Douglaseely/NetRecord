@@ -35,22 +35,21 @@ public class NetRecordHandler : DelegatingHandler
                 return recordResponse;
 
             case ServiceMode.Replay:
-                // TODO: REPLAY
-                return new HttpResponseMessage();
+                return await RecordPlayer.Replay(request, _configuration);
 
             case ServiceMode.Auto:
-                // TODO: REPLAY NEEDED BEFORE MORE WORK
-                var netRecordRequest = await RequestConverter.ToRequestAsync(
-                    request,
-                    _configuration.RequestCensors,
-                    _configuration.JsonSerializerOptions
-                );
-                var recordFile = RecordFile.GetorCreateRecordFile(
-                    _configuration,
-                    new NetRecordTransaction { Request = netRecordRequest }
-                );
-                // if (recordFile.Recordings.Any())
-                return new HttpResponseMessage();
+                var matchingTransaction = await RecordPlayer.CheckRequestForRecording(request, _configuration);
+
+                if (matchingTransaction is not null)
+                    return await RecordPlayer.ReplayRecording(matchingTransaction, request);
+
+                stopwatch.Start();
+                var autoResponse = await base.SendAsync(request, cancellationToken);
+                stopwatch.Stop();
+
+                await Recorder.Record(request, autoResponse, stopwatch.Elapsed, _configuration);
+                
+                return autoResponse;
 
             case ServiceMode.Bypass:
                 var response = await base.SendAsync(request, cancellationToken);

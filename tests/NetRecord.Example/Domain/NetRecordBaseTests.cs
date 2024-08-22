@@ -1,28 +1,29 @@
 using Microsoft.Extensions.DependencyInjection;
 using NetRecord.Services;
 using NetRecord.Services.Extensions;
+using NetRecord.Utils;
 using NetRecord.Utils.Enums;
+using NetRecord.Utils.Models;
 using NUnit.Framework;
 
 namespace NetRecord.Example.Domain;
 
-public class Tests
+public class NetRecordBaseTests : TestSetup
 {
-    private IServiceProvider ServiceProvider { get; set; }
-
     private IHttpClientFactory _httpFactory;
-
-    [OneTimeSetUp]
-    public void RunBeforeAnyTests()
+    
+    public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        var services = new ServiceCollection();
-
-        var config = NetRecordConfiguration.Create(ServiceMode.Record, "./static",
+        var APConfig = NetRecordConfiguration.Create(ServiceMode.Record, "tests/static/APClient",
             fileGroupIdentifier: transaction => transaction.Request.Method);
-        
-        services.AddNetRecordHttpClient("client", "https://advocacyday.dev", config);
 
-        ServiceProvider = services.BuildServiceProvider();
+        var soapboxConfig = NetRecordConfiguration.Create(ServiceMode.Record, "tests/static/SoapBoxClient",
+            fileGroupIdentifier: transaction => transaction.Response.Body!);
+        
+        services.AddNetRecordHttpClient("APClient", "https://advocacyday.dev", APConfig);
+        services.AddNetRecordHttpClient("soapboxClient", "https://soapbox.senate.gov/api/active_offices/?format=json", soapboxConfig);
+
+        return services.BuildServiceProvider();
     }
 
     [SetUp]
@@ -34,10 +35,17 @@ public class Tests
     [Test]
     public async Task TestMessageRecordsProperly()
     {
-        var client = _httpFactory.CreateClient("client");
+        var apClient = _httpFactory.CreateClient("APClient");
+        var soapBoxClient = _httpFactory.CreateClient("soapboxClient");
 
-        var response = await client.GetAsync("/v5/clients");
+        var apResponse = await apClient.GetAsync("/v5/clients");
+        var soapboxResponse = await soapBoxClient.GetAsync("");
 
-        var breakLine = response.Content;
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), "tests/static");
+        Assert.Multiple(() =>
+        {
+            Assert.That(File.Exists(Path.Join(testStaticsPath, "/APClient/NetRecordRecording_Method_GET.json")), Is.True);
+            Assert.That(Directory.GetFiles(Path.Join(testStaticsPath, "SoapBoxClient")), Is.Not.Empty);
+        });
     }
 }

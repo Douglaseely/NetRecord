@@ -47,6 +47,14 @@ public class NetRecordTransaction
         return true;
     }
 
+    internal static NetRecordTransaction FromRequest(NetRecordRequest request)
+    {
+        return new NetRecordTransaction()
+        {
+            Request = request
+        };
+    }
+
     [JsonConstructor]
     internal NetRecordTransaction() { }
 }

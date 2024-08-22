@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using NetRecord.Utils;
 using NUnit.Framework;
 
 namespace NetRecord.Example;
@@ -9,16 +10,16 @@ public class TestFixture
 {
     public static TestFixture Instance { get; private set; }
 
-    public IServiceProvider ServiceProvider { get; private set; }
-
     public List<TestContext.ResultAdapter> FailedTests { get; }
 
     [OneTimeSetUp]
     public async Task RunBeforeAnyTests()
     {
-        // Create empty DI container to be configured in the test-specific ConfigureServices.
-        ServiceProvider = await ConfigureServices();
-
+        // Empty out the test recordings before restoring for a constant state
+        var staticDirectory = Path.Join(DirectoryUtils.GetRootPath(), "test/static");
+        if (Directory.Exists(staticDirectory))
+            Directory.Delete(staticDirectory, true);
+        
         Instance = this;
     }
 

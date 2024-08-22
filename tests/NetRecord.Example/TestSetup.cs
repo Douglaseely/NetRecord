@@ -8,7 +8,7 @@ public abstract class TestSetup
 {
     private static IServiceCollection ServiceCollection { get; } = new ServiceCollection();
 
-    private IServiceProvider ServiceProvider { get; }
+    protected IServiceProvider ServiceProvider { get; }
 
     public abstract IServiceProvider ConfigureServices(IServiceCollection services);
 

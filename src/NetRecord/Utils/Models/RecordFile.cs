@@ -24,9 +24,7 @@ internal class RecordFile
         NetRecordTransaction? matchingRecord = null;
         if (!bypassCheck)
         {
-            matchingRecord = Recordings.FirstOrDefault(t =>
-                t.CheckIfMatch(transaction, configuration)
-            );
+            matchingRecord = GetMatchingTransaction(configuration, transaction);
         }
 
         if (matchingRecord is null)
@@ -44,10 +42,7 @@ internal class RecordFile
         return this;
     }
 
-    public static RecordFile GetorCreateRecordFile(
-        NetRecordConfiguration configuration,
-        NetRecordTransaction transaction
-    )
+    public static RecordFile? GetFile(NetRecordConfiguration configuration, NetRecordTransaction transaction)
     {
         var filePath = configuration.GetPathFromRoot();
         var fileName = configuration.GetFileName(transaction);
@@ -55,7 +50,18 @@ internal class RecordFile
 
         return File.Exists(fullPath)
             ? ReadFromFile(filePath, fileName, configuration.JsonSerializerOptions)
-            : new RecordFile(filePath, fileName);
+            : null;
+    }
+
+    public static RecordFile GetorCreateRecordFile(
+        NetRecordConfiguration configuration,
+        NetRecordTransaction transaction
+    )
+    {
+        var filePath = configuration.GetPathFromRoot();
+        var fileName = configuration.GetFileName(transaction);
+        
+        return GetFile(configuration, transaction) ?? new RecordFile(filePath, fileName);
     }
 
     private static RecordFile ReadFromFile(
@@ -92,11 +98,21 @@ internal class RecordFile
         File.AppendAllText(fullPath, Environment.NewLine);
     }
 
+    public NetRecordTransaction? GetMatchingTransaction(NetRecordConfiguration configuration, NetRecordTransaction transaction)
+    {
+        return Recordings.FirstOrDefault(t =>
+            t.CheckIfMatch(transaction, configuration)
+        ); 
+    }
+
     private RecordFile() { }
 
     private RecordFile(string filePath, string fileName)
     {
         var fullPath = Path.Join(filePath, fileName);
+        if (!Directory.Exists(filePath))
+            Directory.CreateDirectory(filePath);
+            
         using var newFile = File.Create(fullPath);
 
         _filePath = filePath;

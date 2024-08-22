@@ -222,14 +222,8 @@ public static class ServiceCollectionExtentions
         configuration.ClientName = clientName;
 
         services.TryAddSingleton<IHttpClientFactory, NetRecordFactory>();
-        services.TryAddEnumerable(
-            ServiceDescriptor.Singleton<INetRecordConfiguration>(configuration)
-        );
-        services.TryAddEnumerable(
-            ServiceDescriptor.Singleton<INetRecordClientOptions>(
-                new NetRecordClientOptions(clientName, baseAddress!)
-            )
-        );
+        services.AddSingleton<INetRecordConfiguration>(configuration);
+        services.AddSingleton<INetRecordClientOptions>(new NetRecordClientOptions(clientName, baseAddress));
 
         return services;
     }

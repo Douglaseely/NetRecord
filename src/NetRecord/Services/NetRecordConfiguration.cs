@@ -1,4 +1,6 @@
 using System.Linq.Expressions;
+using System.Runtime.Intrinsics.Arm;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -90,6 +92,8 @@ public class NetRecordConfiguration : INetRecordConfiguration
     public bool FactoryReturnsSingleClient { get; set; } = false;
 
     #endregion
+    
+    #region Internal Utilties
 
     public string GetFileName(NetRecordTransaction transaction)
     {
@@ -97,7 +101,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
 
         return baseName + GetFileNameExtension(transaction) + ".json";
     }
-
+    
     public string GetPathFromRoot()
     {
         var rootPath = DirectoryUtils.GetRootPath();
@@ -118,8 +122,17 @@ public class NetRecordConfiguration : INetRecordConfiguration
 
         if (groupingKey.Length > 32)
         {
-            var byteArray = Encoding.ASCII.GetBytes(groupingKey);
-            var hashedKey = Convert.ToBase64String(byteArray);
+            using var sha256 = SHA256.Create();
+            var byteArray = sha256.ComputeHash(Encoding.UTF8.GetBytes(groupingKey));
+            
+            // Convert the byte array to a hexadecimal string
+            var result = new StringBuilder();
+            foreach (var item in byteArray)
+            {
+                result.Append(item.ToString("x2"));
+            }
+
+            var hashedKey = result.ToString()[..32];
 
             fileExtensionString += hashedKey;
         }
@@ -132,6 +145,8 @@ public class NetRecordConfiguration : INetRecordConfiguration
     }
 
     internal NetRecordConfiguration() { }
+    
+    #endregion
 
     /// <summary>
     /// Create your own NetRecordConfiguration
