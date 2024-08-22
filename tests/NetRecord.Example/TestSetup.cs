@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NetRecord.Utils;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
@@ -36,13 +37,11 @@ public abstract class TestSetup
 
         if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
             TestFixture.FailedTests.Add(TestContext.CurrentContext.Result);
-    }
-
-    public async Task SaveAndReset()
-    {
-        throw new NotImplementedException(
-            "This function should be implemented in a derived test class."
-        );
+        
+        // Empty out the test recordings before restoring for a constant state
+        var staticDirectory = Path.Join(DirectoryUtils.GetRootPath(), "test/static");
+        if (Directory.Exists(staticDirectory))
+            Directory.Delete(staticDirectory, true);
     }
 
     private static IServiceCollection RemoveServices(

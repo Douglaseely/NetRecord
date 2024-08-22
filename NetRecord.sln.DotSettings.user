@@ -6,6 +6,7 @@
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fd97ccb8_002D28be_002D4354_002D8dc4_002D584c3a6890d1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestMessageRecordsProperly #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::59C0F643-1530-4105-9D2F-1A9FDA0B5A0D::net8.0::NetRecord.Example.Domain.NetRecordBaseTests.TestMessageRecordsProperly&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::59C0F643-1530-4105-9D2F-1A9FDA0B5A0D::net8.0::NetRecord.Example.Domain.RecordTests.TestMessageRecordOverwritesProperly&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::59C0F643-1530-4105-9D2F-1A9FDA0B5A0D::net8.0::NetRecord.Example.Domain.AutoTests.TestMessageRecordsAndReplaysProperly&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

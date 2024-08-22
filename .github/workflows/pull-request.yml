@@ -1,0 +1,45 @@
+name: "NetRecord: Run PR Tests"
+
+on:
+  pull_request: 
+    branches:
+      - main
+        
+        
+env:
+  DOTNET_VERSION: '8.0.204' # The .NET SDK version to use
+  
+  
+jobs:
+  cleanup-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+      - name: Restore Tools
+        run: dotnet tool restore
+        
+      - name: Run Csharpier
+        run: dotnet csharpier --check .
+        
+  run-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:  
+      - uses: action/checkout@v3
+    
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          
+      - name: Build Project
+        run: dotnet build --configuration Release /clp:ErrorsOnly
+        
+      - name: Run Tests
+        run: dotnet test --configuration Release --no-restore /clp:ErrorsOnly
+        

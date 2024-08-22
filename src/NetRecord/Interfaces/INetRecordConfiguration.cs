@@ -68,12 +68,6 @@ public interface INetRecordConfiguration
 
     public JsonSerializerOptions JsonSerializerOptions { get; set; }
 
-    /// <summary>
-    /// If set to true, a NetRecordFactory will only ever generate and return a single continuous HttpClient,
-    /// rather than generating a new one on every create call.
-    /// </summary>
-    public bool FactoryReturnsSingleClient { get; set; }
-
     #endregion
 
     internal string GetFileName(NetRecordTransaction transaction);

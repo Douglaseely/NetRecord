@@ -15,11 +15,6 @@ public class TestFixture
     [OneTimeSetUp]
     public async Task RunBeforeAnyTests()
     {
-        // Empty out the test recordings before restoring for a constant state
-        var staticDirectory = Path.Join(DirectoryUtils.GetRootPath(), "test/static");
-        if (Directory.Exists(staticDirectory))
-            Directory.Delete(staticDirectory, true);
-        
         Instance = this;
     }
 
