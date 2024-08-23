@@ -5,7 +5,9 @@ on:
     branches:
       - main
     paths:
-      - 'Directory.Build.props'
+      - 'src/Directory.Build.props'
+        
+  workflow_dispatch: ~
 
 permissions:
   contents: write  # Ensure the token has write permissions to contents
