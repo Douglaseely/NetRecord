@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NetRecord.Services;
 using NetRecord.Services.Extensions;
-using NetRecord.Utils;
 using NetRecord.Utils.Enums;
 using NUnit.Framework;
 
@@ -10,27 +9,58 @@ namespace NetRecord.Example.Domain;
 public class ReplayTests : TestSetup
 {
     private IHttpClientFactory _httpFactory;
-    
+
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        var APRecordConfig = NetRecordConfiguration.Create(ServiceMode.Record, "tests/static/APClient");
+        var APRecordConfig = NetRecordConfiguration.Create(
+            ServiceMode.Record,
+            "tests/static/APClient"
+        );
 
-        var soapboxRecordConfig = NetRecordConfiguration.Create(ServiceMode.Record, "tests/static/SoapBoxClient",
-            recordingName: "SoapBoxRecording", fileGroupIdentifier: transaction => transaction.Request.Method.Method);
-        
-        services.AddNetRecordHttpClient("APRecordClient", "https://advocacyday.dev", APRecordConfig);
-        services.AddNetRecordHttpClient("soapboxRecordClient", "https://soapbox.senate.gov/api/active_offices/?format=json", soapboxRecordConfig);
-        
-        var APReplayConfig = NetRecordConfiguration.Create(ServiceMode.Replay, "tests/static/APClient");
+        var soapboxRecordConfig = NetRecordConfiguration.Create(
+            ServiceMode.Record,
+            "tests/static/SoapBoxClient",
+            recordingName: "SoapBoxRecording",
+            fileGroupIdentifier: transaction => transaction.Request.Method.Method
+        );
 
-        var soapboxReplayConfig = NetRecordConfiguration.Create(ServiceMode.Replay, "tests/static/SoapBoxClient",
-            recordingName: "SoapBoxRecording", fileGroupIdentifier: transaction => transaction.Request.Method.Method);
-        
-        services.AddNetRecordHttpClient("APReplayClient", "https://advocacyday.dev", APReplayConfig);
-        services.AddNetRecordHttpClient("soapboxReplayClient", "https://soapbox.senate.gov/api/active_offices/?format=json", soapboxReplayConfig);
+        services.AddNetRecordHttpClient(
+            "APRecordClient",
+            "https://advocacyday.dev",
+            APRecordConfig
+        );
+        services.AddNetRecordHttpClient(
+            "soapboxRecordClient",
+            "https://soapbox.senate.gov/api/active_offices/?format=json",
+            soapboxRecordConfig
+        );
+
+        var APReplayConfig = NetRecordConfiguration.Create(
+            ServiceMode.Replay,
+            "tests/static/APClient"
+        );
+
+        var soapboxReplayConfig = NetRecordConfiguration.Create(
+            ServiceMode.Replay,
+            "tests/static/SoapBoxClient",
+            recordingName: "SoapBoxRecording",
+            fileGroupIdentifier: transaction => transaction.Request.Method.Method
+        );
+
+        services.AddNetRecordHttpClient(
+            "APReplayClient",
+            "https://advocacyday.dev",
+            APReplayConfig
+        );
+        services.AddNetRecordHttpClient(
+            "soapboxReplayClient",
+            "https://soapbox.senate.gov/api/active_offices/?format=json",
+            soapboxReplayConfig
+        );
 
         return services.BuildServiceProvider();
     }
+
     [SetUp]
     public void Setup()
     {
@@ -51,14 +81,22 @@ public class ReplayTests : TestSetup
 
         var apReplayResponse = await apReplayClient.GetAsync("/v5/clients");
         var soapboxReplayResponse = await soapBoxReplayClient.GetAsync("");
-        
-        Assert.Multiple(async () =>
-            {
-                Assert.That(apReplayResponse.StatusCode, Is.EqualTo(apRecordResponse.StatusCode));
-                Assert.That(await apReplayResponse.Content.ReadAsStringAsync(), Is.EqualTo(await apRecordResponse.Content.ReadAsStringAsync()));
-                Assert.That(soapboxReplayResponse.StatusCode, Is.EqualTo(soapboxRecordResponse.StatusCode));
-                Assert.That(await soapboxReplayResponse.Content.ReadAsStringAsync(), Is.EqualTo(await soapboxRecordResponse.Content.ReadAsStringAsync()));
-            });
 
+        Assert.Multiple(async () =>
+        {
+            Assert.That(apReplayResponse.StatusCode, Is.EqualTo(apRecordResponse.StatusCode));
+            Assert.That(
+                await apReplayResponse.Content.ReadAsStringAsync(),
+                Is.EqualTo(await apRecordResponse.Content.ReadAsStringAsync())
+            );
+            Assert.That(
+                soapboxReplayResponse.StatusCode,
+                Is.EqualTo(soapboxRecordResponse.StatusCode)
+            );
+            Assert.That(
+                await soapboxReplayResponse.Content.ReadAsStringAsync(),
+                Is.EqualTo(await soapboxRecordResponse.Content.ReadAsStringAsync())
+            );
+        });
     }
 }

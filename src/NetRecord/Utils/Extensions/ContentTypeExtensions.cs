@@ -15,7 +15,7 @@ internal static class ContentTypeExtensions
             "json" => RequestBodyContentType.Json,
             "xml" => RequestBodyContentType.Xml,
             "html" => RequestBodyContentType.Html,
-            var _ => RequestBodyContentType.Text
+            var _ => RequestBodyContentType.Text,
         };
     }
 

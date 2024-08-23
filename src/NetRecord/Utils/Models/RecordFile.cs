@@ -42,7 +42,10 @@ internal class RecordFile
         return this;
     }
 
-    public static RecordFile? GetFile(NetRecordConfiguration configuration, NetRecordTransaction transaction)
+    public static RecordFile? GetFile(
+        NetRecordConfiguration configuration,
+        NetRecordTransaction transaction
+    )
     {
         var filePath = configuration.GetPathFromRoot();
         var fileName = configuration.GetFileName(transaction);
@@ -60,7 +63,7 @@ internal class RecordFile
     {
         var filePath = configuration.GetPathFromRoot();
         var fileName = configuration.GetFileName(transaction);
-        
+
         return GetFile(configuration, transaction) ?? new RecordFile(filePath, fileName);
     }
 
@@ -80,7 +83,7 @@ internal class RecordFile
         {
             _filePath = filePath,
             _fileName = fileName,
-            Recordings = recordings
+            Recordings = recordings,
         };
     }
 
@@ -98,11 +101,12 @@ internal class RecordFile
         File.AppendAllText(fullPath, Environment.NewLine);
     }
 
-    public NetRecordTransaction? GetMatchingTransaction(NetRecordConfiguration configuration, NetRecordTransaction transaction)
+    public NetRecordTransaction? GetMatchingTransaction(
+        NetRecordConfiguration configuration,
+        NetRecordTransaction transaction
+    )
     {
-        return Recordings.FirstOrDefault(t =>
-            t.CheckIfMatch(transaction, configuration)
-        ); 
+        return Recordings.FirstOrDefault(t => t.CheckIfMatch(transaction, configuration));
     }
 
     private RecordFile() { }
@@ -112,7 +116,7 @@ internal class RecordFile
         var fullPath = Path.Join(filePath, fileName);
         if (!Directory.Exists(filePath))
             Directory.CreateDirectory(filePath);
-            
+
         using var newFile = File.Create(fullPath);
 
         _filePath = filePath;

@@ -49,10 +49,7 @@ public class NetRecordTransaction
 
     internal static NetRecordTransaction FromRequest(NetRecordRequest request)
     {
-        return new NetRecordTransaction()
-        {
-            Request = request
-        };
+        return new NetRecordTransaction() { Request = request };
     }
 
     [JsonConstructor]

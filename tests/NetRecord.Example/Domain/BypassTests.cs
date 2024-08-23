@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using NetRecord.Services;
 using NetRecord.Services.Extensions;
@@ -11,7 +10,7 @@ namespace NetRecord.Example.Domain;
 public class BypassTests : TestSetup
 {
     private IHttpClientFactory _httpFactory;
-    
+
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
         var APConfig = NetRecordConfiguration.Create(ServiceMode.Record, "tests/static/APClient");
@@ -37,8 +36,16 @@ public class BypassTests : TestSetup
         var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), "tests/static");
         Assert.Multiple(() =>
         {
-            Assert.That(File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")), Is.False);
-            Assert.That(File.Exists(Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")), Is.False);
+            Assert.That(
+                File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")),
+                Is.False
+            );
+            Assert.That(
+                File.Exists(
+                    Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
+                ),
+                Is.False
+            );
         });
     }
 }

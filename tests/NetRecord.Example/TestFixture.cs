@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using NetRecord.Utils;
 using NUnit.Framework;
 
 namespace NetRecord.Example;
