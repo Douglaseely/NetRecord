@@ -3,7 +3,6 @@ using NetRecord.Services;
 using NetRecord.Utils;
 using NetRecord.Utils.Enums;
 using NetRecord.Utils.Exceptions;
-using NetRecord.Utils.Models;
 
 namespace NetRecord;
 
@@ -38,7 +37,10 @@ public class NetRecordHandler : DelegatingHandler
                 return await RecordPlayer.Replay(request, _configuration);
 
             case ServiceMode.Auto:
-                var matchingTransaction = await RecordPlayer.CheckRequestForRecording(request, _configuration);
+                var matchingTransaction = await RecordPlayer.CheckRequestForRecording(
+                    request,
+                    _configuration
+                );
 
                 if (matchingTransaction is not null)
                     return await RecordPlayer.ReplayRecording(matchingTransaction, request);
@@ -48,7 +50,7 @@ public class NetRecordHandler : DelegatingHandler
                 stopwatch.Stop();
 
                 await Recorder.Record(request, autoResponse, stopwatch.Elapsed, _configuration);
-                
+
                 return autoResponse;
 
             case ServiceMode.Bypass:

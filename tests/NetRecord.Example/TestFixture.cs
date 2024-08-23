@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using NetRecord.Utils;
 using NUnit.Framework;
 
 namespace NetRecord.Example;
@@ -10,7 +9,7 @@ public class TestFixture
 {
     public static TestFixture Instance { get; private set; }
 
-    public List<TestContext.ResultAdapter> FailedTests { get; }
+    public List<TestContext.ResultAdapter> FailedTests { get; } = [];
 
     [OneTimeSetUp]
     public async Task RunBeforeAnyTests()

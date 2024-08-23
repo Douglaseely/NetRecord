@@ -13,7 +13,7 @@ public class NetRecordElement
         // modify settings so elements will be ordered
         var options = new JsonSerializerOptions
         {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         };
 
         return JsonSerializer.Serialize(this, options);

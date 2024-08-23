@@ -37,7 +37,7 @@ internal static class Recorder
             Request = netRecordRequest,
             Response = netRecordResponse,
             RecordedAt = DateTime.Now,
-            ElapsedTime = elapsedTime
+            ElapsedTime = elapsedTime,
         };
 
         recordFile ??= RecordFile.GetorCreateRecordFile(configuration, httpTransaction);

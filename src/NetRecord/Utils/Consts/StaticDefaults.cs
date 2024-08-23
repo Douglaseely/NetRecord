@@ -12,7 +12,7 @@ internal static class StaticDefaults
         object
     >
     {
-        { RecordingHeaderKey, "true" }
+        { RecordingHeaderKey, "true" },
     };
 
     /// <summary>

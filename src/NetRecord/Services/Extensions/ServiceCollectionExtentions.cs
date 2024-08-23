@@ -38,7 +38,7 @@ public static class ServiceCollectionExtentions
         var configuration = new NetRecordConfiguration
         {
             Mode = recordMode,
-            RecordingsDir = recordingsDir
+            RecordingsDir = recordingsDir,
         };
         configurationSettingFunc?.Invoke(configuration);
 
@@ -102,7 +102,7 @@ public static class ServiceCollectionExtentions
         var configuration = new NetRecordConfiguration
         {
             Mode = recordMode,
-            RecordingsDir = recordingsDir
+            RecordingsDir = recordingsDir,
         };
         configurationSettingFunc?.Invoke(configuration);
 
@@ -173,7 +173,7 @@ public static class ServiceCollectionExtentions
         var configuration = new NetRecordConfiguration
         {
             Mode = recordMode,
-            RecordingsDir = recordingsDir
+            RecordingsDir = recordingsDir,
         };
         configurationSettingFunc?.Invoke(configuration);
 
@@ -223,7 +223,9 @@ public static class ServiceCollectionExtentions
 
         services.TryAddSingleton<IHttpClientFactory, NetRecordFactory>();
         services.AddSingleton<INetRecordConfiguration>(configuration);
-        services.AddSingleton<INetRecordClientOptions>(new NetRecordClientOptions(clientName, baseAddress));
+        services.AddSingleton<INetRecordClientOptions>(
+            new NetRecordClientOptions(clientName, baseAddress)
+        );
 
         return services;
     }
@@ -248,7 +250,7 @@ public static class ServiceCollectionExtentions
         var configuration = new NetRecordConfiguration
         {
             Mode = recordMode,
-            RecordingsDir = recordingsDir
+            RecordingsDir = recordingsDir,
         };
         configurationSettingFunc?.Invoke(configuration);
 

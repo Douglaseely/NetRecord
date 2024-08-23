@@ -23,7 +23,7 @@ internal static class RequestConverter
             ContentHeaders = requestCensors.ApplyHeaderCensors(
                 ConverterHelpers.ConvertToContentHeaders(requestMessage.Content)
             ),
-            BodyContentType = ContentTypeExtensions.DetermineContentType(requestBody, options)
+            BodyContentType = ContentTypeExtensions.DetermineContentType(requestBody, options),
         };
         request.Body = requestCensors.ApplyBodyParametersCensors(
             requestBody,

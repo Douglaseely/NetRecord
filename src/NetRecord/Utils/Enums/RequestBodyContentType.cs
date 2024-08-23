@@ -5,5 +5,5 @@ internal enum RequestBodyContentType
     Json,
     Html,
     Text,
-    Xml
+    Xml,
 }

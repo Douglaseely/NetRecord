@@ -4,7 +4,6 @@ using NetRecord.Services;
 using NetRecord.Services.Extensions;
 using NetRecord.Utils;
 using NetRecord.Utils.Enums;
-using NetRecord.Utils.Models;
 using NUnit.Framework;
 
 namespace NetRecord.Example.Domain;
@@ -12,16 +11,27 @@ namespace NetRecord.Example.Domain;
 public class RecordTests : TestSetup
 {
     private IHttpClientFactory _httpFactory;
-    
+
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        var APConfig = NetRecordConfiguration.Create(ServiceMode.Record, "tests/static/APClient");
+        var APConfig = NetRecordConfiguration.Create(
+            ServiceMode.Record,
+            TestsStaticDir + "/APClient"
+        );
 
-        var soapboxConfig = NetRecordConfiguration.Create(ServiceMode.Record, "tests/static/SoapBoxClient",
-            recordingName: "SoapBoxRecording", fileGroupIdentifier: transaction => transaction.Request.Method.Method);
-        
+        var soapboxConfig = NetRecordConfiguration.Create(
+            ServiceMode.Record,
+            TestsStaticDir + "/SoapBoxClient",
+            recordingName: "SoapBoxRecording",
+            fileGroupIdentifier: transaction => transaction.Request.Method.Method
+        );
+
         services.AddNetRecordHttpClient("APClient", "https://advocacyday.dev", APConfig);
-        services.AddNetRecordHttpClient("soapboxClient", "https://soapbox.senate.gov/api/active_offices/?format=json", soapboxConfig);
+        services.AddNetRecordHttpClient(
+            "soapboxClient",
+            "https://soapbox.senate.gov/api/active_offices/?format=json",
+            soapboxConfig
+        );
 
         return services.BuildServiceProvider();
     }
@@ -41,14 +51,22 @@ public class RecordTests : TestSetup
         var apResponse = await apClient.GetAsync("/v5/clients");
         var soapboxResponse = await soapBoxClient.GetAsync("");
 
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), "tests/static");
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         Assert.Multiple(() =>
         {
-            Assert.That(File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")), Is.True);
-            Assert.That(File.Exists(Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")), Is.True);
+            Assert.That(
+                File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")),
+                Is.True
+            );
+            Assert.That(
+                File.Exists(
+                    Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
+                ),
+                Is.True
+            );
         });
     }
-    
+
     [Test]
     public async Task TestMessageRecordOverwritesProperly()
     {
@@ -57,23 +75,34 @@ public class RecordTests : TestSetup
 
         var apResponse = await apClient.GetAsync("/v5/clients");
         var soapboxResponse = await soapBoxClient.GetAsync("");
-        
+
         var apResponse2 = await apClient.GetAsync("/v5/clients");
         var soapboxResponse2 = await soapBoxClient.GetAsync("");
-        
+
         var apResponse3 = await apClient.GetAsync("/v5/clients");
         var soapboxResponse3 = await soapBoxClient.GetAsync("");
 
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), "tests/static");
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         Assert.Multiple(() =>
         {
-            Assert.That(File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")), Is.True);
-            Assert.That(File.Exists(Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")), Is.True);
+            Assert.That(
+                File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")),
+                Is.True
+            );
+            Assert.That(
+                File.Exists(
+                    Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
+                ),
+                Is.True
+            );
         });
 
-        var file = await File.ReadAllTextAsync(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json"));
-        var soapFile =
-            await File.ReadAllTextAsync(Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json"));
+        var file = await File.ReadAllTextAsync(
+            Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")
+        );
+        var soapFile = await File.ReadAllTextAsync(
+            Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
+        );
         var serializedList = JsonSerializer.Deserialize<List<object>>(file);
         var soapSerializedList = JsonSerializer.Deserialize<List<object>>(soapFile);
         Assert.Multiple(() =>
