@@ -37,7 +37,7 @@ public abstract class TestSetup
 
         if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
             TestFixture.FailedTests.Add(TestContext.CurrentContext.Result);
-        
+
         // Empty out the test recordings before restoring for a constant state
         var staticDirectory = Path.Join(DirectoryUtils.GetRootPath(), "test/static");
         if (Directory.Exists(staticDirectory))
