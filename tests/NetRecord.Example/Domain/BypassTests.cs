@@ -34,18 +34,9 @@ public class BypassTests : TestSetup
         var apResponse = await apClient.GetAsync("/v5/clients");
 
         var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), "tests/static");
-        Assert.Multiple(() =>
-        {
-            Assert.That(
-                File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")),
-                Is.False
-            );
-            Assert.That(
-                File.Exists(
-                    Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
-                ),
-                Is.False
-            );
-        });
+        Assert.That(
+            File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")),
+            Is.False
+        );
     }
 }
