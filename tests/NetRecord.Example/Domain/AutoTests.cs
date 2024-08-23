@@ -5,6 +5,7 @@ using NetRecord.Services.Extensions;
 using NetRecord.Utils;
 using NetRecord.Utils.Enums;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace NetRecord.Example.Domain;
 
@@ -14,11 +15,14 @@ public class AutoTests : TestSetup
 
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        var APConfig = NetRecordConfiguration.Create(ServiceMode.Auto, "tests/static/APClient");
+        var APConfig = NetRecordConfiguration.Create(
+            ServiceMode.Auto,
+            TestsStaticDir + "/APClient"
+        );
 
         var soapboxConfig = NetRecordConfiguration.Create(
             ServiceMode.Auto,
-            "tests/static/SoapBoxClient",
+            TestsStaticDir + "/SoapBoxClient",
             recordingName: "SoapBoxRecording",
             fileGroupIdentifier: transaction => transaction.Request.Method.Method
         );
@@ -48,7 +52,7 @@ public class AutoTests : TestSetup
         var apRecordResponse = await apClient.GetAsync("/v5/clients");
         var soapboxRecordResponse = await soapBoxClient.GetAsync("");
 
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), "tests/static");
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         Assert.Multiple(() =>
         {
             Assert.That(

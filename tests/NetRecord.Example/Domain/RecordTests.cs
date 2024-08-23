@@ -14,11 +14,14 @@ public class RecordTests : TestSetup
 
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        var APConfig = NetRecordConfiguration.Create(ServiceMode.Record, "tests/static/APClient");
+        var APConfig = NetRecordConfiguration.Create(
+            ServiceMode.Record,
+            TestsStaticDir + "/APClient"
+        );
 
         var soapboxConfig = NetRecordConfiguration.Create(
             ServiceMode.Record,
-            "tests/static/SoapBoxClient",
+            TestsStaticDir + "/SoapBoxClient",
             recordingName: "SoapBoxRecording",
             fileGroupIdentifier: transaction => transaction.Request.Method.Method
         );
@@ -48,7 +51,7 @@ public class RecordTests : TestSetup
         var apResponse = await apClient.GetAsync("/v5/clients");
         var soapboxResponse = await soapBoxClient.GetAsync("");
 
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), "tests/static");
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         Assert.Multiple(() =>
         {
             Assert.That(
@@ -79,7 +82,7 @@ public class RecordTests : TestSetup
         var apResponse3 = await apClient.GetAsync("/v5/clients");
         var soapboxResponse3 = await soapBoxClient.GetAsync("");
 
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), "tests/static");
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         Assert.Multiple(() =>
         {
             Assert.That(

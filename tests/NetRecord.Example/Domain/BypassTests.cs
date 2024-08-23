@@ -13,7 +13,10 @@ public class BypassTests : TestSetup
 
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        var APConfig = NetRecordConfiguration.Create(ServiceMode.Record, "tests/static/APClient");
+        var APConfig = NetRecordConfiguration.Create(
+            ServiceMode.Bypass,
+            TestsStaticDir + "/APClient"
+        );
 
         services.AddNetRecordHttpClient("APClient", "https://advocacyday.dev", APConfig);
 
@@ -29,11 +32,16 @@ public class BypassTests : TestSetup
     [Test]
     public async Task TestMessageRecordsProperly()
     {
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
+        Assert.That(
+            File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")),
+            Is.False
+        );
+
         var apClient = _httpFactory.CreateClient("APClient");
 
         var apResponse = await apClient.GetAsync("/v5/clients");
 
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), "tests/static");
         Assert.That(
             File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")),
             Is.False

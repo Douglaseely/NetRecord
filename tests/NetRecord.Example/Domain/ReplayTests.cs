@@ -14,12 +14,12 @@ public class ReplayTests : TestSetup
     {
         var APRecordConfig = NetRecordConfiguration.Create(
             ServiceMode.Record,
-            "tests/static/APClient"
+            TestsStaticDir + "/APClient"
         );
 
         var soapboxRecordConfig = NetRecordConfiguration.Create(
             ServiceMode.Record,
-            "tests/static/SoapBoxClient",
+            TestsStaticDir + "/SoapBoxClient",
             recordingName: "SoapBoxRecording",
             fileGroupIdentifier: transaction => transaction.Request.Method.Method
         );
@@ -37,12 +37,12 @@ public class ReplayTests : TestSetup
 
         var APReplayConfig = NetRecordConfiguration.Create(
             ServiceMode.Replay,
-            "tests/static/APClient"
+            TestsStaticDir + "/APClient"
         );
 
         var soapboxReplayConfig = NetRecordConfiguration.Create(
             ServiceMode.Replay,
-            "tests/static/SoapBoxClient",
+            TestsStaticDir + "/SoapBoxClient",
             recordingName: "SoapBoxRecording",
             fileGroupIdentifier: transaction => transaction.Request.Method.Method
         );

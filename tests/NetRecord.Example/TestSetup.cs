@@ -7,13 +7,14 @@ namespace NetRecord.Example;
 
 public abstract class TestSetup
 {
+    public const string TestsStaticDir = "tests/static";
+
     private static IServiceCollection ServiceCollection { get; } = new ServiceCollection();
 
     protected IServiceProvider ServiceProvider { get; }
 
     public abstract IServiceProvider ConfigureServices(IServiceCollection services);
 
-    public IServiceScope Scope { get; private set; }
     public TestFixture TestFixture { get; } = TestFixture.Instance;
 
     public TestSetup()
@@ -25,21 +26,16 @@ public abstract class TestSetup
     }
 
     [SetUp]
-    public virtual async Task RunBeforeEveryTest()
-    {
-        Scope = ServiceProvider.CreateScope();
-    }
+    public virtual async Task RunBeforeEveryTest() { }
 
     [TearDown]
     public virtual async Task RunAfterEveryTest()
     {
-        Scope.Dispose();
-
         if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
             TestFixture.FailedTests.Add(TestContext.CurrentContext.Result);
 
         // Empty out the test recordings before restoring for a constant state
-        var staticDirectory = Path.Join(DirectoryUtils.GetRootPath(), "test/static");
+        var staticDirectory = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         if (Directory.Exists(staticDirectory))
             Directory.Delete(staticDirectory, true);
     }
