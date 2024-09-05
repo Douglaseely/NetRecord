@@ -1,3 +1,5 @@
+using NetRecord.Interfaces;
+
 namespace NetRecord.Services;
 
 /// <summary>
@@ -11,9 +13,9 @@ public class NetRecordHttpClient : HttpClient
         : base(handler) { }
 
     /// <summary>
-    ///
+    /// Creates a NetRecordHttpClient using the passed configurations settings
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A new NetRecordHttpClient</returns>
     public static NetRecordHttpClient CreateFromConfiguration(
         Uri baseAddress,
         NetRecordConfiguration configuration
@@ -23,5 +25,17 @@ public class NetRecordHttpClient : HttpClient
         var client = new NetRecordHttpClient(handler);
         client.BaseAddress = baseAddress;
         return client;
+    }
+    
+    /// <summary>
+    /// Creates a NetRecordHttpClient using the passed configurations settings
+    /// </summary>
+    /// <returns>A new NetRecordHttpClient</returns>
+    public static NetRecordHttpClient CreateFromConfiguration(
+        Uri baseAddress,
+        INetRecordConfiguration configuration
+    )
+    {
+        return CreateFromConfiguration(baseAddress, (NetRecordConfiguration)configuration);
     }
 }
