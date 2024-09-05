@@ -4,6 +4,9 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>NetRecord.Extensions</RootNamespace>
+        <PackageDescription>An httpClient replacement that can record and replay requests with high configurability</PackageDescription>
+        <AssemblyName>Douglaseely.NetRecord.Extensions</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

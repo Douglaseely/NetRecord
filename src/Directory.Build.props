@@ -1,8 +1,9 @@
 <Project>
     <PropertyGroup>
-        <Version>1.1.0</Version>
+        <Version>1.1.1</Version>
         <IsPackable>true</IsPackable>
         <Authors>Douglas Seely (douglaseelyjr@gmail.com)</Authors>
         <RepositoryUrl>https://github.com/douglaseely/NetRecord</RepositoryUrl>
+        <AssemblyName>Douglaseely.NetRecord</AssemblyName>
     </PropertyGroup>
 </Project>
