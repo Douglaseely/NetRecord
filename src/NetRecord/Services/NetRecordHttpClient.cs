@@ -26,7 +26,7 @@ public class NetRecordHttpClient : HttpClient
         client.BaseAddress = baseAddress;
         return client;
     }
-    
+
     /// <summary>
     /// Creates a NetRecordHttpClient using the passed configurations settings
     /// </summary>
