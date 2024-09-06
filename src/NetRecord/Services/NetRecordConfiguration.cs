@@ -55,10 +55,10 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// This value should be an expression body that returns a list of calls of the RequestMessage,
     /// that will be used to match any sent request with a request recording,
     /// the function will be run on both new requests and saved recordings and the values checked against eachother.
-    /// By default, only the request Method and URI will be used.
+    /// By default, only the request Method, Body, and URI will be used.
     /// </summary>
     public Func<NetRecordRequest, object?>[] UniqueIdentifiers { get; set; } =
-        [request => request.Method.Method, request => request.Uri];
+        [request => request.Method.Method, request => request.Uri, request => request.Body];
 
     /// <summary>
     /// The censors to be applied to both the requests and responses saved, hiding sensitive data.
