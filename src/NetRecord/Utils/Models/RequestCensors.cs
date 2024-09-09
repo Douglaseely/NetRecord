@@ -9,6 +9,11 @@ using NetRecord.Utils.Serialization;
 
 namespace NetRecord.Utils.Models;
 
+// Much of this is taken from EasyVCR, I'll eventually rewrite it for this libraries more specific use with v2.
+/// <summary>
+/// The Censors that will be applied to any Recording file saved,
+/// can be used to automatically remove data from requests and responses so sensitive data isn't saved.
+/// </summary>
 public class RequestCensors
 {
     private readonly List<RequestCensorElement> _bodyElementsToCensor = new();
@@ -17,8 +22,16 @@ public class RequestCensors
     private readonly List<RequestCensorElement> _queryParamsToCensor = new();
     private readonly List<RegexRequestCensorElement> _pathElementsToCensor = new();
 
+    private RequestCensors() { }
+
+    /// <summary>
+    /// Creates a new RequestCensors object without any default censors set
+    /// </summary>
     public static RequestCensors None => new();
 
+    /// <summary>
+    /// Creates a new RequestCensors object that will attempt to clean commonly named authorization and api key Headers, Query Parameters, and Body Elements
+    /// </summary>
     public static RequestCensors DefaultSensitive
     {
         get
@@ -36,7 +49,7 @@ public class RequestCensors
     ///     Add a rule to censor specified body elements.
     /// </summary>
     /// <param name="elements">List of body elements to censor.</param>
-    /// <returns>The current Censor object.</returns>
+    /// <returns>The current RequestCensors object.</returns>
     public RequestCensors CensorBodyElements(IEnumerable<RequestCensorElement> elements)
     {
         _bodyElementsToCensor.AddRange(elements);
@@ -48,7 +61,7 @@ public class RequestCensors
     /// </summary>
     /// <param name="elementKeys">List of keys of body elements to censor.</param>
     /// <param name="caseSensitive">Whether to match case sensitively.</param>
-    /// <returns></returns>
+    /// <returns>The current RequestCensors object.</returns>
     public RequestCensors CensorBodyElementsByKeys(
         List<string> elementKeys,
         bool caseSensitive = false
@@ -67,7 +80,7 @@ public class RequestCensors
     ///     Note: This will censor the header keys in both the request and response.
     /// </summary>
     /// <param name="headers">List of headers to censor.</param>
-    /// <returns>The current Censor object.</returns>
+    /// <returns>The current RequestCensors object.</returns>
     public RequestCensors CensorHeaders(IEnumerable<RequestCensorElement> headers)
     {
         _headersToCensor.AddRange(headers);
@@ -80,7 +93,7 @@ public class RequestCensors
     /// </summary>
     /// <param name="headerKeys">List of keys of header to censor.</param>
     /// <param name="caseSensitive">Whether to match case sensitively.</param>
-    /// <returns>The current Censor object.</returns>
+    /// <returns>The current RequestCensors object.</returns>
     public RequestCensors CensorHeadersByKeys(List<string> headerKeys, bool caseSensitive = false)
     {
         foreach (var key in headerKeys)
