@@ -8,5 +8,6 @@
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::59C0F643-1530-4105-9D2F-1A9FDA0B5A0D::net8.0::NetRecord.Example.Domain.RecordTests.TestMessageRecordOverwritesProperly&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::59C0F643-1530-4105-9D2F-1A9FDA0B5A0D::net8.0::NetRecord.Example.Domain.AutoTests.TestMessageRecordsAndReplaysProperly&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::59C0F643-1530-4105-9D2F-1A9FDA0B5A0D::net8.0::NetRecord.Example.Domain.ReplayTests.TestMessageReplaysProperly&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

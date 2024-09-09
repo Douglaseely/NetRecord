@@ -63,7 +63,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// <summary>
     /// The censors to be applied to both the requests and responses saved, hiding sensitive data.
     /// </summary>
-    public RequestCensors RequestCensors { get; set; } = new();
+    public RequestCensors RequestCensors { get; set; } = RequestCensors.DefaultSensitive;
 
     /// <summary>
     /// The name for the recording json file that will be saved to the file path,
