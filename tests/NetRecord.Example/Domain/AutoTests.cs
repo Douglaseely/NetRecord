@@ -16,10 +16,7 @@ public class AutoTests : TestSetup
 
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        APConfig = NetRecordConfiguration.Create(
-            ServiceMode.Auto,
-            TestsStaticDir + "/APClient"
-        );
+        APConfig = NetRecordConfiguration.Create(ServiceMode.Auto, TestsStaticDir + "/APClient");
 
         SoapBoxConfig = NetRecordConfiguration.Create(
             ServiceMode.Auto,
@@ -72,11 +69,16 @@ public class AutoTests : TestSetup
         var soapboxReplayResponse = await soapBoxClient.GetAsync("");
 
         var apRecordContent = await apRecordResponse.Content.ReadAsStringAsync();
-        apRecordContent = JsonSerializer.Serialize(JsonSerializer.Deserialize<object>(apRecordContent),
-            APConfig.JsonSerializerOptions);
+        apRecordContent = JsonSerializer.Serialize(
+            JsonSerializer.Deserialize<object>(apRecordContent),
+            APConfig.JsonSerializerOptions
+        );
 
         var soapboxRecordContent = await soapboxRecordResponse.Content.ReadAsStringAsync();
-        soapboxRecordContent = JsonSerializer.Serialize(JsonSerializer.Deserialize<object>(soapboxRecordContent), SoapBoxConfig.JsonSerializerOptions);
+        soapboxRecordContent = JsonSerializer.Serialize(
+            JsonSerializer.Deserialize<object>(soapboxRecordContent),
+            SoapBoxConfig.JsonSerializerOptions
+        );
 
         Assert.Multiple(async () =>
         {

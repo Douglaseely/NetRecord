@@ -15,10 +15,7 @@ public class ReplayTests : TestSetup
 
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        APConfig = NetRecordConfiguration.Create(
-            ServiceMode.Record,
-            TestsStaticDir + "/APClient"
-        );
+        APConfig = NetRecordConfiguration.Create(ServiceMode.Record, TestsStaticDir + "/APClient");
 
         SoapBoxConfig = NetRecordConfiguration.Create(
             ServiceMode.Record,
@@ -27,11 +24,7 @@ public class ReplayTests : TestSetup
             fileGroupIdentifier: transaction => transaction.Request.Method.Method
         );
 
-        services.AddNetRecordHttpClient(
-            "APRecordClient",
-            "https://advocacyday.dev",
-            APConfig
-        );
+        services.AddNetRecordHttpClient("APRecordClient", "https://advocacyday.dev", APConfig);
         services.AddNetRecordHttpClient(
             "soapboxRecordClient",
             "https://soapbox.senate.gov/api/active_offices/?format=json",
@@ -84,13 +77,18 @@ public class ReplayTests : TestSetup
 
         var apReplayResponse = await apReplayClient.GetAsync("/v5/clients");
         var soapboxReplayResponse = await soapBoxReplayClient.GetAsync("");
-        
+
         var apRecordContent = await apRecordResponse.Content.ReadAsStringAsync();
-        apRecordContent = JsonSerializer.Serialize(JsonSerializer.Deserialize<object>(apRecordContent),
-            APConfig.JsonSerializerOptions);
+        apRecordContent = JsonSerializer.Serialize(
+            JsonSerializer.Deserialize<object>(apRecordContent),
+            APConfig.JsonSerializerOptions
+        );
 
         var soapboxRecordContent = await soapboxRecordResponse.Content.ReadAsStringAsync();
-        soapboxRecordContent = JsonSerializer.Serialize(JsonSerializer.Deserialize<object>(soapboxRecordContent), SoapBoxConfig.JsonSerializerOptions);
+        soapboxRecordContent = JsonSerializer.Serialize(
+            JsonSerializer.Deserialize<object>(soapboxRecordContent),
+            SoapBoxConfig.JsonSerializerOptions
+        );
 
         Assert.Multiple(async () =>
         {
