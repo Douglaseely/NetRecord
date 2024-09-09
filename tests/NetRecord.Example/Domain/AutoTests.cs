@@ -5,22 +5,23 @@ using NetRecord.Services.Extensions;
 using NetRecord.Utils;
 using NetRecord.Utils.Enums;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace NetRecord.Example.Domain;
 
 public class AutoTests : TestSetup
 {
     private IHttpClientFactory _httpFactory;
+    private NetRecordConfiguration APConfig;
+    private NetRecordConfiguration SoapBoxConfig;
 
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        var APConfig = NetRecordConfiguration.Create(
+        APConfig = NetRecordConfiguration.Create(
             ServiceMode.Auto,
             TestsStaticDir + "/APClient"
         );
 
-        var soapboxConfig = NetRecordConfiguration.Create(
+        SoapBoxConfig = NetRecordConfiguration.Create(
             ServiceMode.Auto,
             TestsStaticDir + "/SoapBoxClient",
             recordingName: "SoapBoxRecording",
@@ -31,7 +32,7 @@ public class AutoTests : TestSetup
         services.AddNetRecordHttpClient(
             "soapboxClient",
             "https://soapbox.senate.gov/api/active_offices/?format=json",
-            soapboxConfig
+            SoapBoxConfig
         );
 
         return services.BuildServiceProvider();
@@ -70,12 +71,19 @@ public class AutoTests : TestSetup
         var apReplayResponse = await apClient.GetAsync("/v5/clients");
         var soapboxReplayResponse = await soapBoxClient.GetAsync("");
 
+        var apRecordContent = await apRecordResponse.Content.ReadAsStringAsync();
+        apRecordContent = JsonSerializer.Serialize(JsonSerializer.Deserialize<object>(apRecordContent),
+            APConfig.JsonSerializerOptions);
+
+        var soapboxRecordContent = await soapboxRecordResponse.Content.ReadAsStringAsync();
+        soapboxRecordContent = JsonSerializer.Serialize(JsonSerializer.Deserialize<object>(soapboxRecordContent), SoapBoxConfig.JsonSerializerOptions);
+
         Assert.Multiple(async () =>
         {
             Assert.That(apReplayResponse.StatusCode, Is.EqualTo(apRecordResponse.StatusCode));
             Assert.That(
                 await apReplayResponse.Content.ReadAsStringAsync(),
-                Is.EqualTo(await apRecordResponse.Content.ReadAsStringAsync())
+                Is.EqualTo(apRecordContent)
             );
             Assert.That(
                 soapboxReplayResponse.StatusCode,
@@ -83,7 +91,7 @@ public class AutoTests : TestSetup
             );
             Assert.That(
                 await soapboxReplayResponse.Content.ReadAsStringAsync(),
-                Is.EqualTo(await soapboxRecordResponse.Content.ReadAsStringAsync())
+                Is.EqualTo(soapboxRecordContent)
             );
         });
 
