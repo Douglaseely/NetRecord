@@ -46,4 +46,24 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
+    
+    /// <summary>
+    /// Creates and add an IRestClient to the IServiceCollection, after creating a new NetRecordHttpClient using the passed Uri and configuration
+    /// </summary>
+    /// <param name="configuration">The configuration settings that will be injected into the HttpClient</param>
+    /// <param name="options">Optional RestClientOptions that will be passed into the RestClient</param>
+    /// <returns></returns>
+    public static IServiceCollection AddNetRecordRestClient(
+        this IServiceCollection services,
+        NetRecordConfiguration configuration,
+        RestClientOptions? options = null
+    )
+    {
+        var httpClient = NetRecordHttpClient.CreateFromConfiguration(configuration);
+
+        var restClient = new RestClient(httpClient, options);
+        services.TryAddSingleton<IRestClient>(restClient);
+
+        return services;
+    }
 }
