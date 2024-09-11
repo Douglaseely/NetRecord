@@ -46,7 +46,7 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
-    
+
     /// <summary>
     /// Creates and add an IRestClient to the IServiceCollection, after creating a new NetRecordHttpClient using the passed Uri and configuration
     /// </summary>

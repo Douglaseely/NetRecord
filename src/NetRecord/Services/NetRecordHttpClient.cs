@@ -28,15 +28,13 @@ public class NetRecordHttpClient : HttpClient
         client.BaseAddress = baseAddress;
         return client;
     }
-    
+
     /// <summary>
     /// Creates a NetRecordHttpClient using the passed configurations settings
     /// </summary>
     /// <param name="configuration">The passed configuration settings for the HttpClient to use</param>
     /// <returns>A new NetRecordHttpClient</returns>
-    public static NetRecordHttpClient CreateFromConfiguration(
-        NetRecordConfiguration configuration
-    )
+    public static NetRecordHttpClient CreateFromConfiguration(NetRecordConfiguration configuration)
     {
         var handler = new NetRecordHandler(configuration);
         var client = new NetRecordHttpClient(handler);
