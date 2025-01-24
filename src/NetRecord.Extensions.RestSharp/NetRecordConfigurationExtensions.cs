@@ -24,9 +24,7 @@ public static class NetRecordConfigurationExtensions
     /// Creates a RestClient that uses a NetRecordHttpClient from the current configuration
     /// </summary>
     /// <returns>A newly created NetRecordHttpClient</returns>
-    public static RestClient CreateRestClient(
-        this NetRecordConfiguration configuration
-    )
+    public static RestClient CreateRestClient(this NetRecordConfiguration configuration)
     {
         var httpClient = NetRecordHttpClient.CreateFromConfiguration(configuration);
         return new RestClient(httpClient);
@@ -50,11 +48,11 @@ public static class NetRecordConfigurationExtensions
     /// Creates a RestClient that uses a NetRecordHttpClient from the current configuration
     /// </summary>
     /// <returns>A newly created NetRecordHttpClient</returns>
-    public static RestClient CreateRestClient(
-        this INetRecordConfiguration configuration
-    )
+    public static RestClient CreateRestClient(this INetRecordConfiguration configuration)
     {
-        var httpClient = NetRecordHttpClient.CreateFromConfiguration((NetRecordConfiguration)configuration);
+        var httpClient = NetRecordHttpClient.CreateFromConfiguration(
+            (NetRecordConfiguration)configuration
+        );
         return new RestClient(httpClient);
     }
 }
