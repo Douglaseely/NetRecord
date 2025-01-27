@@ -23,7 +23,7 @@ public class RecordTests : TestSetup
             ServiceMode.Record,
             TestsStaticDir + "/SoapBoxClient",
             recordingName: "SoapBoxRecording",
-            fileGroupIdentifier: transaction => transaction.Request.Method.Method
+            fileGroupIdentifier: transaction => transaction.Request.RequestHeaders["Random"]
         );
 
         services.AddNetRecordHttpClient("APClient", "https://advocacyday.dev", APConfig);
@@ -48,8 +48,11 @@ public class RecordTests : TestSetup
         var apClient = _httpFactory.CreateClient("APClient");
         var soapBoxClient = _httpFactory.CreateClient("soapboxClient");
 
+        var soapBoxRequest = new HttpRequestMessage(HttpMethod.Get, "");
+        soapBoxRequest.Headers.Add("Random", "Hello");
+
         var apResponse = await apClient.GetAsync("/v5/clients");
-        var soapboxResponse = await soapBoxClient.GetAsync("");
+        var soapboxResponse = await soapBoxClient.SendAsync(soapBoxRequest);
 
         var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         Assert.Multiple(() =>
@@ -60,7 +63,10 @@ public class RecordTests : TestSetup
             );
             Assert.That(
                 File.Exists(
-                    Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
+                    Path.Join(
+                        testStaticsPath,
+                        "SoapBoxClient/SoapBoxRecording_RequestHeaders_Random_Hello.json"
+                    )
                 ),
                 Is.True
             );
@@ -73,14 +79,23 @@ public class RecordTests : TestSetup
         var apClient = _httpFactory.CreateClient("APClient");
         var soapBoxClient = _httpFactory.CreateClient("soapboxClient");
 
+        var soapBoxRequest = new HttpRequestMessage(HttpMethod.Get, "");
+        soapBoxRequest.Headers.Add("Random", "Hello");
+
+        var soapBoxRequest2 = new HttpRequestMessage(HttpMethod.Get, "");
+        soapBoxRequest2.Headers.Add("Random", "Hello");
+
+        var soapBoxRequest3 = new HttpRequestMessage(HttpMethod.Get, "");
+        soapBoxRequest3.Headers.Add("Random", "Hello");
+
         var apResponse = await apClient.GetAsync("/v5/clients");
-        var soapboxResponse = await soapBoxClient.GetAsync("");
+        var soapboxResponse = await soapBoxClient.SendAsync(soapBoxRequest);
 
         var apResponse2 = await apClient.GetAsync("/v5/clients");
-        var soapboxResponse2 = await soapBoxClient.GetAsync("");
+        var soapboxResponse2 = await soapBoxClient.SendAsync(soapBoxRequest2);
 
         var apResponse3 = await apClient.GetAsync("/v5/clients");
-        var soapboxResponse3 = await soapBoxClient.GetAsync("");
+        var soapboxResponse3 = await soapBoxClient.SendAsync(soapBoxRequest3);
 
         var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         Assert.Multiple(() =>
@@ -91,7 +106,10 @@ public class RecordTests : TestSetup
             );
             Assert.That(
                 File.Exists(
-                    Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
+                    Path.Join(
+                        testStaticsPath,
+                        "SoapBoxClient/SoapBoxRecording_RequestHeaders_Random_Hello.json"
+                    )
                 ),
                 Is.True
             );
@@ -101,7 +119,10 @@ public class RecordTests : TestSetup
             Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")
         );
         var soapFile = await File.ReadAllTextAsync(
-            Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
+            Path.Join(
+                testStaticsPath,
+                "SoapBoxClient/SoapBoxRecording_RequestHeaders_Random_Hello.json"
+            )
         );
         var serializedList = JsonSerializer.Deserialize<List<object>>(file);
         var soapSerializedList = JsonSerializer.Deserialize<List<object>>(soapFile);
