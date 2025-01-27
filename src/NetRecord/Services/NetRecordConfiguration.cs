@@ -103,11 +103,19 @@ public class NetRecordConfiguration : INetRecordConfiguration
 
     public string GetFileNameExtension(NetRecordTransaction transaction)
     {
+        var fileExtensionString = "";
+        
         // If we aren't grouping the file, we don't need to add anything
         if (FileGroupIdentifier is null)
             return "";
 
-        var fileExtensionString = "_" + FileGroupIdentifier.GetPropertyInfo().Name + "_";
+        if (FileGroupIdentifier.IsDictionaryAccess())
+        {
+            var dictInfo = FileGroupIdentifier.GetDictionaryAccessInfo();
+            fileExtensionString = $"_{dictInfo.DictionaryProperty.Name}_{dictInfo.Key}_";
+        }
+        else
+            fileExtensionString = $"_{FileGroupIdentifier.GetPropertyInfo().Name}_";
 
         var groupingKey = FileGroupIdentifier?.Compile().Invoke(transaction).ToString();
         if (groupingKey is null)
@@ -115,8 +123,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
 
         if (groupingKey.Length > 32)
         {
-            using var sha256 = SHA256.Create();
-            var byteArray = sha256.ComputeHash(Encoding.UTF8.GetBytes(groupingKey));
+            var byteArray = SHA256.HashData(Encoding.UTF8.GetBytes(groupingKey));
 
             // Convert the byte array to a hexadecimal string
             var result = new StringBuilder();
