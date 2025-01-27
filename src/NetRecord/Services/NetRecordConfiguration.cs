@@ -45,10 +45,11 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// <summary>
     /// This value will decide if every request recorded will be recorded into its own file,
     /// or if they will all be grouped into their own file. The expression body for this should return a
-    /// property of the RequestMessage, which will be used to group similar requests.
-    /// This value will additionally be added to the end of the recording file name.
+    /// property from within the transaction, which will be used to group similar requests.
+    /// This value will additionally be added to the end of the recording file name. If using a header identifier,
+    /// it will add the header property name, key, and value to the file name
     /// </summary>
-    /// <exception cref="NetRecordException">If the expression does not contain exclusively a single property call of the HttpRequestMessage</exception>
+    /// <exception cref="NetRecordException">If the expression does not contain exclusively a single property or dictionary call from the transaction or its children</exception>
     public Expression<Func<NetRecordTransaction, object>>? FileGroupIdentifier { get; set; }
 
     /// <summary>
