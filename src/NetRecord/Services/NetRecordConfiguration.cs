@@ -105,7 +105,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
     public string GetFileNameExtension(NetRecordTransaction transaction)
     {
         var fileExtensionString = "";
-        
+
         // If we aren't grouping the file, we don't need to add anything
         if (FileGroupIdentifier is null)
             return "";
