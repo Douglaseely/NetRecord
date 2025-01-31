@@ -17,10 +17,10 @@ public static class DirectoryUtils
             var parentDir = Directory.GetParent(dir);
             if (parentDir == null)
                 break;
-        
+
             dir = parentDir.FullName;
         }
-       
+
         if (baseDirectory is null)
             throw new Exception("Could not find solution root nor active project root directory");
 

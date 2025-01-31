@@ -13,12 +13,18 @@ public class BypassTests : TestSetup
 
     public override IServiceProvider ConfigureServices(IServiceCollection services)
     {
-        var APConfig = NetRecordConfiguration.Create(
+        var soapBoxConfig = NetRecordConfiguration.Create(
             ServiceMode.Bypass,
-            TestsStaticDir + "/APClient"
+            TestsStaticDir + "/SoapBoxClient",
+            recordingName: "SoapBoxRecording",
+            fileGroupIdentifier: transaction => transaction.Request.Method.Method
         );
 
-        services.AddNetRecordHttpClient("APClient", "https://advocacyday.dev", APConfig);
+        services.AddNetRecordHttpClient(
+            "soapBoxClient",
+            "https://soapbox.senate.gov/api/active_offices/?format=json",
+            soapBoxConfig
+        );
 
         return services.BuildServiceProvider();
     }
@@ -34,16 +40,16 @@ public class BypassTests : TestSetup
     {
         var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         Assert.That(
-            File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")),
+            File.Exists(Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")),
             Is.False
         );
 
-        var apClient = _httpFactory.CreateClient("APClient");
+        var soapBoxClient = _httpFactory.CreateClient("soapBoxClient");
 
-        var apResponse = await apClient.GetAsync("/v5/clients");
+        var soapBoxResponse = await soapBoxClient.GetAsync("/v5/clients");
 
         Assert.That(
-            File.Exists(Path.Join(testStaticsPath, "APClient/NetRecordRecording.json")),
+            File.Exists(Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")),
             Is.False
         );
     }

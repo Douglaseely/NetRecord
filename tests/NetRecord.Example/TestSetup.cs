@@ -38,8 +38,11 @@ public abstract class TestSetup
         var staticDirectory = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         if (Directory.Exists(staticDirectory + "/SoapBoxClient"))
             Directory.Delete(staticDirectory + "/SoapBoxClient", true);
-        
-        await File.WriteAllTextAsync(staticDirectory + "/APClient/NetRecordRecording.json", String.Empty);
+
+        await File.WriteAllTextAsync(
+            staticDirectory + "/APClient/NetRecordRecording.json",
+            String.Empty
+        );
     }
 
     private static IServiceCollection RemoveServices(
