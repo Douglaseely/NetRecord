@@ -40,7 +40,9 @@ public class BypassTests : TestSetup
     {
         var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
         Assert.That(
-            File.Exists(Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")),
+            File.Exists(
+                Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
+            ),
             Is.False
         );
 
@@ -49,7 +51,9 @@ public class BypassTests : TestSetup
         var soapBoxResponse = await soapBoxClient.GetAsync("/v5/clients");
 
         Assert.That(
-            File.Exists(Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")),
+            File.Exists(
+                Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
+            ),
             Is.False
         );
     }

@@ -83,7 +83,7 @@ internal class RecordFile
         {
             _filePath = filePath,
             _fileName = fileName,
-            Recordings = recordings ?? []
+            Recordings = recordings ?? [],
         };
     }
 
