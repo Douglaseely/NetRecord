@@ -75,6 +75,11 @@ public class NetRecordConfiguration : INetRecordConfiguration
     public Func<string> RecordingName { get; set; } = () => "NetRecordRecording";
 
     /// <summary>
+    /// The max length the final portion of a file name can have, before it will be shortened down into a 32 character SHA
+    /// </summary>
+    public int FileNameLengthMax { get; set; } = 64;
+
+    /// <summary>
     /// The jsonSerializerOptions that ALL serialization and deserialization will use
     /// </summary>
     public JsonSerializerOptions JsonSerializerOptions { get; set; } =
@@ -122,7 +127,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
         if (groupingKey is null)
             throw new NetRecordException("No value in file group identifier");
 
-        if (groupingKey.Length > 32)
+        if (groupingKey.Length > FileNameLengthMax)
         {
             var byteArray = SHA256.HashData(Encoding.UTF8.GetBytes(groupingKey));
 
