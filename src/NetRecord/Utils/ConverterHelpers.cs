@@ -6,7 +6,7 @@ public static class ConverterHelpers
 {
     public static async Task<string> ConvertToStringAsync(HttpContent? content)
     {
-        return content == null ? string.Empty : await content.ReadAsStringAsync();
+        return content == null ? "" : await content.ReadAsStringAsync();
     }
 
     public static IDictionary<string, string> ConvertToHeaders(HttpHeaders headers)

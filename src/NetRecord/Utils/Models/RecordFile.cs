@@ -106,7 +106,13 @@ internal class RecordFile
         NetRecordTransaction transaction
     )
     {
-        return Recordings.FirstOrDefault(t => t.CheckIfMatch(transaction, configuration));
+        var matchedRecordings = Recordings
+            .Where(t => t.CheckIfMatch(transaction, configuration))
+            .ToList();
+        if (matchedRecordings.Count > 1 && configuration.CheckForMultipleMatches)
+            throw new NetRecordException("Multiple matching recordings were found ");
+
+        return matchedRecordings.FirstOrDefault();
     }
 
     private RecordFile() { }
