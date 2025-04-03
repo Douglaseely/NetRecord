@@ -7,17 +7,11 @@ namespace NetRecord.Utils;
 internal static class RecordPlayer
 {
     public static async Task<NetRecordTransaction?> CheckRequestForRecording(
-        HttpRequestMessage request,
+        NetRecordRequest request,
         NetRecordConfiguration configuration
     )
     {
-        var netRecordRequest = await RequestConverter.ToRequestAsync(
-            request,
-            configuration.RequestCensors,
-            configuration.JsonSerializerOptions
-        );
-
-        var transaction = NetRecordTransaction.FromRequest(netRecordRequest);
+        var transaction = NetRecordTransaction.FromRequest(request);
 
         var recordFile = RecordFile.GetFile(configuration, transaction);
 
@@ -25,16 +19,23 @@ internal static class RecordPlayer
     }
 
     public static async Task<HttpResponseMessage> Replay(
+        NetRecordRequest request,
         HttpRequestMessage httpRequest,
         NetRecordConfiguration configuration
     )
     {
-        var matchingTransaction = await CheckRequestForRecording(httpRequest, configuration);
+        var matchingTransaction = await CheckRequestForRecording(request, configuration);
 
         if (matchingTransaction is null)
+        {
+            var uniqueParameters = configuration
+                .UniqueIdentifiers.Select(uniqueIdentifier => uniqueIdentifier.Invoke(request))
+                .ToList();
+
             throw new NetRecordException(
-                $"Could not find matching request for {httpRequest.RequestUri}"
+                $"Could not find matching request for request to {request.Uri}, with parameters values: ({string.Join(", ", uniqueParameters)})."
             );
+        }
 
         return await ReplayRecording(matchingTransaction, httpRequest);
     }

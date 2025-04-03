@@ -24,6 +24,11 @@ public class NetRecordHandler : DelegatingHandler
     )
     {
         var stopwatch = new Stopwatch();
+        var netRecordRequest = await RequestConverter.ToRequestAsync(
+            request,
+            _configuration.RequestCensors,
+            _configuration.JsonSerializerOptions
+        );
         switch (_configuration.Mode)
         {
             case ServiceMode.Record:
@@ -34,11 +39,11 @@ public class NetRecordHandler : DelegatingHandler
                 return recordResponse;
 
             case ServiceMode.Replay:
-                return await RecordPlayer.Replay(request, _configuration);
+                return await RecordPlayer.Replay(netRecordRequest, request, _configuration);
 
             case ServiceMode.Auto:
                 var matchingTransaction = await RecordPlayer.CheckRequestForRecording(
-                    request,
+                    netRecordRequest,
                     _configuration
                 );
 

@@ -79,6 +79,11 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// </summary>
     public int FileNameLengthMax { get; set; } = 64;
 
+    /// If true, then when searching for a matching recording, if multiple are found, an exception will be thrown
+    /// If false, the replayer will take the first matching element, which could potentially lead to some randomness in what recording is replayed
+    /// </summary>
+    public bool CheckForMultipleMatches { get; set; } = true;
+
     /// <summary>
     /// The jsonSerializerOptions that ALL serialization and deserialization will use
     /// </summary>
