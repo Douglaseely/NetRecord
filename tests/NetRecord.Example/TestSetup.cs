@@ -35,7 +35,7 @@ public abstract class TestSetup
             TestFixture.FailedTests.Add(TestContext.CurrentContext.Result);
 
         // Empty out the test recordings before restoring for a constant state
-        var staticDirectory = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
+        var staticDirectory = Path.Join(DirectoryUtils.GetRootPath("*.sln"), TestsStaticDir);
         if (Directory.Exists(staticDirectory + "/SoapBoxClient"))
             Directory.Delete(staticDirectory + "/SoapBoxClient", true);
 

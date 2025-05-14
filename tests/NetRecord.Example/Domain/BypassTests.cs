@@ -38,7 +38,7 @@ public class BypassTests : TestSetup
     [Test]
     public async Task TestMessageRecordsProperly()
     {
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath("*.sln"), TestsStaticDir);
         Assert.That(
             File.Exists(
                 Path.Join(testStaticsPath, "SoapBoxClient/SoapBoxRecording_Method_GET.json")
