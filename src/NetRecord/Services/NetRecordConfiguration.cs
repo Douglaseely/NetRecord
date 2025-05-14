@@ -173,6 +173,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// <param name="fileGroupIdentifier">The identifier value that will be used to match requests into files</param>
     /// <param name="uniqueIdentifiers">The values that will be used to match two requests to each other for record rewriting and replaying</param>
     /// <param name="requestCensors">The censors that will hide and remove data from requests before saving</param>
+    /// <param name="rootFileIndicator">The file that NetRecord will look for to identify the solution root</param>
     /// <returns>A newly created configuration</returns>
     public static NetRecordConfiguration Create(
         ServiceMode mode,
@@ -180,7 +181,8 @@ public class NetRecordConfiguration : INetRecordConfiguration
         Func<string>? recordingName = null,
         Expression<Func<NetRecordTransaction, object>>? fileGroupIdentifier = null,
         Func<NetRecordRequest, object>[]? uniqueIdentifiers = null,
-        RequestCensors? requestCensors = null
+        RequestCensors? requestCensors = null,
+        string? rootFileIndicator = null
     )
     {
         var config = new NetRecordConfiguration { Mode = mode, RecordingsDir = recordingDir };
@@ -197,6 +199,9 @@ public class NetRecordConfiguration : INetRecordConfiguration
         if (recordingName is not null)
             config.RecordingName = recordingName;
 
+        if (rootFileIndicator is not null)
+            config.RootFileIndicator = rootFileIndicator;
+
         return config;
     }
 
@@ -209,6 +214,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// <param name="fileGroupIdentifier">The identifier value that will be used to match requests into files</param>
     /// <param name="uniqueIdentifiers">The values that will be used to match two requests to each other for record rewriting and replaying</param>
     /// <param name="requestCensors">The censors that will hide and remove data from requests before saving</param>
+    /// <param name="rootFileIndicator">The file that NetRecord will look for to identify the solution root</param>
     /// <returns>A newly created configuration</returns>
     public static NetRecordConfiguration Create(
         ServiceMode mode,
@@ -216,7 +222,8 @@ public class NetRecordConfiguration : INetRecordConfiguration
         string recordingName,
         Expression<Func<NetRecordTransaction, object>>? fileGroupIdentifier = null,
         Func<NetRecordRequest, object>[]? uniqueIdentifiers = null,
-        RequestCensors? requestCensors = null
+        RequestCensors? requestCensors = null,
+        string? rootFileIndicator = null
     )
     {
         var config = new NetRecordConfiguration { Mode = mode, RecordingsDir = recordingDir };
@@ -233,6 +240,9 @@ public class NetRecordConfiguration : INetRecordConfiguration
         if (recordingName is not null)
             config.RecordingName = () => recordingName;
 
+        if (rootFileIndicator is not null)
+            config.RootFileIndicator = rootFileIndicator;
+
         return config;
     }
 
@@ -245,6 +255,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// <param name="fileGroupIdentifier">The identifier value that will be used to match requests into files</param>
     /// <param name="uniqueIdentifiers">The values that will be used to match two requests to each other for record rewriting and replaying</param>
     /// <param name="requestCensors">The censors that will hide and remove data from requests before saving</param>
+    /// <param name="rootFileIndicator">The file that NetRecord will look for to identify the solution root</param>
     /// <returns>A newly created configuration</returns>
     public static NetRecordConfiguration Create(
         ServiceMode mode,
@@ -252,7 +263,8 @@ public class NetRecordConfiguration : INetRecordConfiguration
         Func<string>? recordingName = null,
         Expression<Func<NetRecordTransaction, object>>? fileGroupIdentifier = null,
         Func<NetRecordRequest, object>[]? uniqueIdentifiers = null,
-        RequestCensors? requestCensors = null
+        RequestCensors? requestCensors = null,
+        string? rootFileIndicator = null
     )
     {
         var config = new NetRecordConfiguration { Mode = mode, RecordingsDir = () => recordingDir };
@@ -269,6 +281,9 @@ public class NetRecordConfiguration : INetRecordConfiguration
         if (recordingName is not null)
             config.RecordingName = recordingName;
 
+        if (rootFileIndicator is not null)
+            config.RootFileIndicator = rootFileIndicator;
+
         return config;
     }
 
@@ -281,6 +296,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
     /// <param name="fileGroupIdentifier">The identifier value that will be used to match requests into files</param>
     /// <param name="uniqueIdentifiers">The values that will be used to match two requests to each other for record rewriting and replaying</param>
     /// <param name="requestCensors">The censors that will hide and remove data from requests before saving</param>
+    /// <param name="rootFileIndicator">The file that NetRecord will look for to identify the solution root</param>
     /// <returns>A newly created configuration</returns>
     public static NetRecordConfiguration Create(
         ServiceMode mode,
@@ -288,7 +304,8 @@ public class NetRecordConfiguration : INetRecordConfiguration
         string recordingName,
         Expression<Func<NetRecordTransaction, object>>? fileGroupIdentifier = null,
         Func<NetRecordRequest, object>[]? uniqueIdentifiers = null,
-        RequestCensors? requestCensors = null
+        RequestCensors? requestCensors = null,
+        string? rootFileIndicator = null
     )
     {
         var config = new NetRecordConfiguration { Mode = mode, RecordingsDir = () => recordingDir };
@@ -304,6 +321,9 @@ public class NetRecordConfiguration : INetRecordConfiguration
 
         if (recordingName is not null)
             config.RecordingName = () => recordingName;
+
+        if (rootFileIndicator is not null)
+            config.RootFileIndicator = rootFileIndicator;
 
         return config;
     }
