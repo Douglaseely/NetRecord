@@ -54,7 +54,7 @@ public class RecordTests : TestSetup
         var apResponse = await apClient.GetAsync("/v5/clients");
         var soapboxResponse = await soapBoxClient.SendAsync(soapBoxRequest);
 
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath("*.sln"), TestsStaticDir);
         Assert.Multiple(() =>
         {
             Assert.That(
@@ -97,7 +97,7 @@ public class RecordTests : TestSetup
         var apResponse3 = await apClient.GetAsync("/v5/clients");
         var soapboxResponse3 = await soapBoxClient.SendAsync(soapBoxRequest3);
 
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath("*.sln"), TestsStaticDir);
         Assert.Multiple(() =>
         {
             Assert.That(

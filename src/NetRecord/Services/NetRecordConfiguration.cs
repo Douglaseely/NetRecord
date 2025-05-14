@@ -85,6 +85,11 @@ public class NetRecordConfiguration : INetRecordConfiguration
     public bool CheckForMultipleMatches { get; set; } = true;
 
     /// <summary>
+    /// The file that the app will search for to discover the root directory that recordings will be saved from, defaulted to the solution
+    /// </summary>
+    public string RootFileIndicator { get; set; } = "*.sln";
+
+    /// <summary>
     /// The jsonSerializerOptions that ALL serialization and deserialization will use
     /// </summary>
     public JsonSerializerOptions JsonSerializerOptions { get; set; } =
@@ -108,7 +113,7 @@ public class NetRecordConfiguration : INetRecordConfiguration
 
     public string GetPathFromRoot()
     {
-        var rootPath = DirectoryUtils.GetRootPath();
+        var rootPath = DirectoryUtils.GetRootPath(RootFileIndicator);
         return Path.Join(rootPath, RecordingsDir.Invoke());
     }
 

@@ -50,7 +50,7 @@ public class AutoTests : TestSetup
         var apRecordResponse = await apClient.GetAsync("/v5/clients");
         var soapboxRecordResponse = await soapBoxClient.GetAsync("");
 
-        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath(), TestsStaticDir);
+        var testStaticsPath = Path.Join(DirectoryUtils.GetRootPath("*.sln"), TestsStaticDir);
         Assert.Multiple(() =>
         {
             Assert.That(

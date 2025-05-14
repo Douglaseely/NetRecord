@@ -2,7 +2,7 @@ namespace NetRecord.Utils;
 
 public static class DirectoryUtils
 {
-    public static string GetRootPath()
+    public static string GetRootPath(string fileName)
     {
         // First, try to get the application's base directory
         string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -11,7 +11,7 @@ public static class DirectoryUtils
         var dir = Directory.GetCurrentDirectory();
         while (dir != null)
         {
-            if (Directory.GetFiles(dir, "*.sln").Length > 0)
+            if (Directory.GetFiles(dir, fileName).Length > 0)
                 return dir;
 
             var parentDir = Directory.GetParent(dir);
